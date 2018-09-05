@@ -6,11 +6,13 @@
     "type": "project",
     "require": {
         "php": "^7.1.3",
+        "doctrine/dbal": "^2.8",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.2",
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
@@ -48,7 +50,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
-        ]
+        ],
+        "test": "vendor/bin/phpunit",
+        "cs-fix": "php-cs-fixer fix app"
     },
     "config": {
         "preferred-install": "dist",

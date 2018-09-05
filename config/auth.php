@@ -66,8 +66,8 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
-            'model' => App\User::class,
+            'driver' => 'eloquent_email_or_nickname_provider',
+            'model' => \App\Casper\Model\User::class,
         ],
 
         // 'users' => [

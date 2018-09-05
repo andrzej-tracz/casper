@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Casper\Manager\UserManager;
+use App\Casper\Model\Gender;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -31,12 +31,18 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * @var UserManager
+     */
+    protected $manager;
+
+    /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param UserManager $manager
      */
-    public function __construct()
+    public function __construct(UserManager $manager)
     {
+        $this->manager = $manager;
         $this->middleware('guest');
     }
 
@@ -49,9 +55,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'nickname' => 'required|string|max:255|unique:users|regex:/^\S*$/u',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'gender' => 'sometimes|in:' . implode(",", Gender::getValidValues()),
+            'birth_date' => 'sometimes|date|date_format:Y-m-d|before:today'
         ]);
     }
 
@@ -59,14 +67,10 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return \App\Casper\Model\User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $this->manager->create($data);
     }
 }

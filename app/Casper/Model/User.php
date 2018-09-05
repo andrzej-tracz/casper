@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Casper\Model;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,13 +10,18 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $dates = [
+        'email_verified_at',
+        'birth_date',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'nickname', 'email', 'password', 'gender', 'birth_date'
     ];
 
     /**
