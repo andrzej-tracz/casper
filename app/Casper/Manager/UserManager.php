@@ -6,6 +6,12 @@ use App\Casper\Model\User;
 
 class UserManager
 {
+    /**
+     * Creates new user
+     *
+     * @param array $data
+     * @return mixed
+     */
     public function create(array $data)
     {
         return User::create([
