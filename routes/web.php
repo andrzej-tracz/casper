@@ -16,5 +16,21 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('home', 'HomeController@index')->name('home');
+Route::get('nearest-events', 'Web\EventsController@nearest')->name('web.events.nearest');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group([
+    'prefix' => 'panel',
+    'middleware' => 'auth',
+    'as' => 'panel.'
+], function () {
+
+    Route::get('events', 'Panel\EventsController@index')->name('events.index');
+    Route::group([
+        'prefix' => 'ajax'
+    ], function () {
+        Route::resource('events', 'API\EventsController')->only([
+            'store', 'update', 'delete'
+        ]);
+    });
+});
