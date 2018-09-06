@@ -10,7 +10,10 @@ class RegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testRedirectForAuthenticatedUsers()
+    /**
+     * @test
+     */
+    public function it_redirects_authenticated_users()
     {
         $this->actingAs(User::first());
 
@@ -19,7 +22,10 @@ class RegistrationTest extends TestCase
         $response->assertRedirect('home');
     }
 
-    public function testRegistrationValidation()
+    /**
+     * @test
+     */
+    public function it_validates_registration_data()
     {
         $response = $this->post('register', [
             'nickname' => null,
@@ -34,7 +40,10 @@ class RegistrationTest extends TestCase
         ]);
     }
 
-    public function testRegistrationValidationPassword()
+    /**
+     * @test
+     */
+    public function it_validates_password_confirmation()
     {
         $faker = \Faker\Factory::create();
 
@@ -50,7 +59,10 @@ class RegistrationTest extends TestCase
         ]);
     }
 
-    public function testSuccessRegistration()
+    /**
+     * @test
+     */
+    public function it_handles_registration_when_data_is_valid()
     {
         $faker = \Faker\Factory::create();
         $nick = $faker->userName;
@@ -73,7 +85,10 @@ class RegistrationTest extends TestCase
         ]);
     }
 
-    public function testSuccessRegistrationWithOutAdditionalFields()
+    /**
+     * @test
+     */
+    public function it_handles_registration_without_optional_parameters()
     {
         $faker = \Faker\Factory::create();
         $nick = $faker->userName;

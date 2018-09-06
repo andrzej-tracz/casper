@@ -2,7 +2,6 @@
 
 namespace App\Auth;
 
-use http\Exception\InvalidArgumentException;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\UserProvider as UserProviderContract;
 
@@ -24,7 +23,7 @@ class EmailOrNicknameUserProvider extends EloquentUserProvider implements UserPr
         $emailOrNickname = $credentials['email'] ?? $credentials['nickname'] ?? null;
 
         if (!$emailOrNickname) {
-            throw new InvalidArgumentException("Email or nickname is required and not provided.");
+            throw new \InvalidArgumentException("Email or nickname is required and not provided.");
         }
 
         $query->where(function ($q) use ($emailOrNickname) {
