@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { FormField, Textarea, Switch } from '../../../abstract/components';
+import { FormField, Textarea, Switch, MapField } from '../../../abstract/components';
 import { EVENTS_FORM_ID } from "../constants";
 
 const validate = values => {
@@ -83,6 +83,11 @@ let EventForm = props => {
         label="End date of applications"
         component={FormField}
         type="date"
+      />
+      <Field
+        name="position"
+        lavel="Choose a place of event"
+        component={MapField}
       />
       <button
         className="btn btn-primary mb-1 mt-1"

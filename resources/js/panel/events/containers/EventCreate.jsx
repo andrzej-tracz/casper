@@ -6,17 +6,27 @@ import { eventsActions } from "../actions";
 class EventCreate extends React.Component {
 
   handleCreateEvent = values => {
-    this.props.eventCreate({
+    const attributes = {
       ...values,
       event_type: Boolean(values.is_private) ? 'private' : 'public'
-    });
+    };
+
+    if (values.position) {
+        attributes.geo_lat = values.position.lat;
+        attributes.geo_lng = values.position.lng;
+        delete attributes.position;
+    }
+
+    this.props.eventCreate(attributes);
   };
 
   render() {
     return (
       <div>
         <h3>Create new Event</h3>
-        <EventForm onSubmit={this.handleCreateEvent} />
+        <EventForm
+          onSubmit={this.handleCreateEvent}
+        />
       </div>
     );
   }

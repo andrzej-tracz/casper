@@ -20,7 +20,9 @@ sagaMiddleware.run(sagas);
 
 const EventsComponent = () => (
   <Provider store={store}>
-    <EventCreate />
+    <div>
+      <EventCreate />
+    </div>
   </Provider>
 );
 

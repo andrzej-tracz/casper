@@ -1,8 +1,9 @@
-import { fork, put, takeLatest, call } from 'redux-saga/effects';
+import { fork, put, takeLatest } from 'redux-saga/effects';
 import { CrudSagas } from '../../../abstract/sagas/crud-saga';
 import { EVENTS_PREFIX, EVENTS_API_ENDPOINT, EVENTS_FORM_ID } from '../constants';
 import { eventsActions } from "../actions";
 import { reset, stopSubmit } from 'redux-form';
+import { extractErrors } from "../../../abstract/api";
 
 const sagas = new CrudSagas(EVENTS_PREFIX, EVENTS_API_ENDPOINT);
 
@@ -11,15 +12,11 @@ function * handleSuccessEventCreate() {
 }
 
 function * handleFailedEventCreate(action) {
-  const validation = {};
   const { errors } = action.payload.response.data;
+  const messages = extractErrors(errors);
 
-  if (errors && Object.keys(errors).length) {
-    Object.keys(errors).forEach(key => {
-      validation[key] = 'This field is not valid';
-    });
-
-    yield call(stopSubmit, EVENTS_FORM_ID, validation)
+  if (messages && Object.keys(messages).length) {
+    yield put(stopSubmit(EVENTS_FORM_ID, messages))
   }
 }
 

@@ -1,4 +1,6 @@
 let mix = require('laravel-mix');
+const argv = require('yargs').argv;
+const profile = argv.env.profile || 'production';
 
 /*
  |--------------------------------------------------------------------------
@@ -12,6 +14,13 @@ let mix = require('laravel-mix');
  */
 
 mix
+  .webpackConfig({
+    resolve: {
+      alias: {
+        config: path.resolve(__dirname, `resources/js/config/${profile}`),
+      }
+    }
+  })
   .react('resources/js/app.js', 'public/js')
   .react('resources/js/panel/app.js', 'public/js/panel')
   .sass('resources/sass/app.scss', 'public/css');
