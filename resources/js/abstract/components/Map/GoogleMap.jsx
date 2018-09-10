@@ -64,7 +64,6 @@ class GoogleMapComponent extends React.Component {
   };
 
   requestBrowserGeoLocation = () => {
-
     if (!navigator.geolocation) {
       console.warn('Browser geolocation not supported');
 
@@ -79,6 +78,10 @@ class GoogleMapComponent extends React.Component {
         };
 
         this.setState({ position });
+      }, () => {
+        this.setState({
+          position: this.getDefaultCenterPosition()
+        });
       }
     );
   };

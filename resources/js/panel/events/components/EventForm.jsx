@@ -2,28 +2,29 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { FormField, Textarea, Switch, MapField } from '../../../abstract/components';
 import { EVENTS_FORM_ID } from "../constants";
+import Validator from 'validatorjs';
 
 const validate = values => {
-  const errors = {};
 
-  const required = {
-    name: "Name is required",
-    description: "Description is required",
-    place: "Place is required",
-    date: "Start date is required",
-    time: "Start time is required",
-    duration_minutes: "Duration is required",
-    max_guests_number: "Maksimum number of guests is required",
-    applications_ends_at: "End date of applications is required",
+  const rules = {
+    name: 'required',
+    description: 'required',
+    place: 'required',
+    date: 'required|date',
+    time: 'required',
+    duration_minutes: 'required|numeric|min:0',
+    max_guests_number: 'required|numeric|min:0',
+    applications_ends_at: 'required|date',
   };
 
-  Object.keys(required).map((key) => {
-    if (!values[key]) {
-      errors[key] = required[key];
-    }
+  const validator = new Validator(values, rules, {
+    'min.duration_minutes': 'Duration is invalid. ',
+    'min.max_guests_number': 'Guest limit is not valid. ',
   });
 
-  return errors;
+  if (validator.fails()) {
+    return validator.errors.all();
+  }
 };
 
 let EventForm = props => {
@@ -74,7 +75,7 @@ let EventForm = props => {
       />
       <Field
         name="max_guests_number"
-        label="Maksimum number of guests"
+        label="Maximum number of guests"
         component={FormField}
         type="number"
       />
