@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Casper'),
 
     /*
     |--------------------------------------------------------------------------
@@ -151,6 +151,8 @@ return [
          * Package Service Providers...
          */
 
+        App\Casper\CasperServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -159,7 +161,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*

@@ -30,6 +30,7 @@
     "redux-devtools-extension": "^2.13.5",
     "redux-form": "^7.4.2",
     "redux-saga": "^0.16.0",
-    "redux-saga-routines": "^2.2.5"
+    "redux-saga-routines": "^2.2.5",
+    "validatorjs": "^3.14.2"
   }
 }

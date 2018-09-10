@@ -67,6 +67,5 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/panel/app.js') }}" defer></script>
 </body>
 </html>
