@@ -15,11 +15,7 @@ class EventsRepository
      */
     public function fetchPublicUpcomingEvents($days = 30)
     {
-        return Event::onlyPublic()
-            ->whereBetween('date', [
-                Carbon::now(), Carbon::now()->addDays($days)
-            ])
-            ->get();
+        return $this->createUpcomingEventsQuery($days)->get();
     }
 
     /**
@@ -30,18 +26,40 @@ class EventsRepository
      * @param int $radius
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function fetchNearestEvents($lat, $lng, $radius = 5)
+    public function fetchNearestEvents($lat, $lng, $radius = null)
     {
-        return Event::query()
+        if (is_null($radius)) {
+            $radius = 5;
+        }
+
+        // TODO:: Attach private events here when invitations will be done
+        return $this
+            ->createUpcomingEventsQuery()
             ->selectRaw(
-                '(6371 * acos( cos( radians(?) ) * cos( radians( geo_lat ) ) 
-                * cos( radians( geo_lng ) - radians(?) ) + sin( radians(?) ) 
-                * sin(radians(geo_lat)) ) ) AS distance, *',
+                '(6371 * acos(cos(radians(?)) * cos(radians(geo_lat)) 
+                * cos(radians(geo_lng) - radians(?)) + sin(radians(?)) 
+                * sin(radians(geo_lat)))) AS distance',
                 [
                     $lat, $lng, $lat
                 ]
             )
-            ->where('distance', '<=', $radius)
+            ->having('distance', '<=', $radius)
             ->get();
+    }
+
+    /**
+     * Create initial query for upcoming events
+     *
+     * @param int $days
+     * @return mixed
+     */
+    protected function createUpcomingEventsQuery($days = 30)
+    {
+        return Event::onlyPublic()
+            ->where('date', '<=', Carbon::now()->addDays($days))
+            ->selectRaw(
+                'events.*, concat(events.date, " ", events.time) as event_date_time'
+            )
+            ->having('event_date_time', '>=', Carbon::now());
     }
 }

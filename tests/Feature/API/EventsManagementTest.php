@@ -55,9 +55,6 @@ class EventsManagementTest extends TestCase
                 'event_type' => 'public',
                 'place' => 'Warsaw',
                 'description' => 'Some test event',
-                'user' => [
-                    'id' => $user->id
-                ]
             ]
         ]);
     }

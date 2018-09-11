@@ -44,7 +44,7 @@ class GoogleMapComponent extends React.Component {
       return;
     }
 
-    const googleMaps = this.props.googleMaps || ( window.google && window.google.maps ) || this.googleMaps;
+    const googleMaps = this.props.googleMaps || (window.google && window.google.maps) || this.googleMaps;
     this.geocoder = new googleMaps.Geocoder();
 
     this.geocoder.geocode({

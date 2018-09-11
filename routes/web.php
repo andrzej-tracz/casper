@@ -22,6 +22,13 @@ Route::group([
     'as' => 'web.event.'
 ], function () {
     Route::get('{event}', 'Web\EventsController@details')->name('details');
+
+    Route::group([
+        'prefix' => 'ajax',
+        'as' => 'ajax.',
+    ], function () {
+        Route::get('nearest-events-search', 'API\EventsController@searchNearest');
+    });
 });
 
 Route::group([
@@ -32,7 +39,8 @@ Route::group([
     Route::get('events', 'Panel\EventsController@index')->name('events.index');
 
     Route::group([
-        'prefix' => 'ajax'
+        'prefix' => 'ajax',
+        'as' => 'ajax.',
     ], function () {
         Route::resource('events', 'API\EventsController')->only([
             'store', 'update', 'delete'

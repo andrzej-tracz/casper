@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import guestReducers from './reducers';
+import eventsReducer from './reducers';
 import { sagas }  from './sagas';
 import EventCreate from "./containers/EventCreate";
 
@@ -14,7 +14,7 @@ const enhancer = composeWithDevTools(
   applyMiddleware(sagaMiddleware)
 );
 
-const store = createStore(guestReducers, enhancer);
+const store = createStore(eventsReducer, enhancer);
 
 sagaMiddleware.run(sagas);
 

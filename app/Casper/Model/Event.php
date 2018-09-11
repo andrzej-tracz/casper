@@ -24,6 +24,11 @@ class Event extends Model
         'applications_ends_at',
     ];
 
+    protected $casts = [
+        'geo_lat' => 'double',
+        'geo_lng' => 'double',
+    ];
+
     protected $dates = [
         'applications_ends_at'
     ];

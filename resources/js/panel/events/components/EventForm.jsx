@@ -104,4 +104,3 @@ let EventForm = props => {
 EventForm = reduxForm({ form: EVENTS_FORM_ID, validate })(EventForm);
 
 export default EventForm;
-
