@@ -5,6 +5,7 @@ namespace App\Casper;
 use App\Casper\Manager\EventManager;
 use App\Casper\Manager\UserManager;
 use App\Casper\Repository\EventsRepository;
+use App\Casper\Repository\GuestRepository;
 use Illuminate\Support\ServiceProvider;
 
 class CasperServiceProvider extends ServiceProvider
@@ -27,6 +28,7 @@ class CasperServiceProvider extends ServiceProvider
     protected function registerRepositories()
     {
         $this->app->singleton(EventsRepository::class);
+        $this->app->singleton(GuestRepository::class);
     }
 
     protected function registerManagers()

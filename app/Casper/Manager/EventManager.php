@@ -3,6 +3,7 @@
 namespace App\Casper\Manager;
 
 use App\Casper\Model\Event;
+use App\Casper\Model\Guest;
 use App\Casper\Model\User;
 
 class EventManager
@@ -23,5 +24,22 @@ class EventManager
         $event->save();
 
         return $event;
+    }
+
+    /**
+     * Creates new guest entry for a given event and user
+     *
+     * @param Event $event
+     * @param User $user
+     * @return Guest
+     */
+    public function joinToEvent(Event $event, User $user)
+    {
+        $guest = new Guest();
+        $guest->user()->associate($user);
+        $guest->event()->associate($event);
+        $guest->save();
+
+        return $guest;
     }
 }

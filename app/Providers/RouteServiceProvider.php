@@ -23,7 +23,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->registerGlobalPatterns();
 
         parent::boot();
     }
@@ -69,5 +69,16 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Register global patterns
+     *
+     * @return void
+     */
+    protected function registerGlobalPatterns()
+    {
+        Route::pattern('id', '[0-9]+');
+        Route::pattern('event', '[0-9]+');
     }
 }

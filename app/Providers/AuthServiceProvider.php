@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Auth\EmailOrNicknameUserProvider;
+use App\Casper\Model\Event;
+use App\Policies\EventPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -14,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Event::class => EventPolicy::class
     ];
 
     /**

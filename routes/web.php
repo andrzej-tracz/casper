@@ -21,7 +21,8 @@ Route::group([
     'prefix' => 'event',
     'as' => 'web.event.'
 ], function () {
-    Route::get('{event}', 'Web\EventsController@details')->name('details');
+    Route::get('{event}', 'Web\EventsController@details')->name('details')->middleware('can:view,event');
+    Route::post('join/{event}', 'Web\EventsController@join')->name('join')->middleware('can:join,event');
 
     Route::group([
         'prefix' => 'ajax',

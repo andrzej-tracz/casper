@@ -23,15 +23,15 @@ class Event extends JsonResource
             'event_type' => $this->resource->event_type,
             'place' => $this->resource->place,
             'description' => $this->resource->description,
-            'date' => $this->resource->date,
+            'date' => (string) $this->resource->date,
             'time' => $this->resource->time,
             'duration_minutes' => $this->resource->duration_minutes,
             'max_guests_number' => $this->resource->max_guests_number,
             'geo_lat' => $this->resource->geo_lat,
             'geo_lng' => $this->resource->geo_lng,
-            'applications_ends_at' => $this->resource->applications_ends_at,
-            'created_at' => $this->resource->created_at,
-            'updated_at' => $this->resource->updated_at,
+            'applications_ends_at' => (string) $this->resource->applications_ends_at,
+            'created_at' => (string) $this->resource->created_at,
+            'updated_at' => (string) $this->resource->updated_at,
         ];
     }
 }

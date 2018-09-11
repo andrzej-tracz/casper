@@ -30,7 +30,8 @@ class Event extends Model
     ];
 
     protected $dates = [
-        'applications_ends_at'
+        'applications_ends_at',
+        'date'
     ];
 
     /**
@@ -39,6 +40,14 @@ class Event extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function guests()
+    {
+        return $this->hasMany(Guest::class);
     }
 
     /**

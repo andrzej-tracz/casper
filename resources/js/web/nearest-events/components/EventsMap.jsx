@@ -87,7 +87,7 @@ class EventsMap extends React.Component {
         <GoogleMap
           onClick={this.onMapClicked}
           ref={this.onMapMount}
-          defaultZoom={8}
+          defaultZoom={11}
           defaultCenter={this.getDefaultCenterPosition()}
           center={this.getCenterPosition()}
         >
