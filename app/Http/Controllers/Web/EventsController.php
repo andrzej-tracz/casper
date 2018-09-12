@@ -8,8 +8,8 @@ use App\Casper\Model\User;
 use App\Casper\Repository\EventsRepository;
 use App\Casper\Repository\GuestRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Validation\ValidationException;
 
 class EventsController extends Controller
 {
@@ -19,19 +19,13 @@ class EventsController extends Controller
     protected $events;
 
     /**
-     * @var GuestRepository
+     * @var Guard
      */
-    protected $guests;
-
     protected $guard;
 
-    public function __construct(
-        EventsRepository $repository,
-        GuestRepository $guestRepository,
-        Guard $guard
-    ) {
+    public function __construct(EventsRepository $repository, Guard $guard)
+    {
         $this->events = $repository;
-        $this->guests = $guestRepository;
         $this->guard = $guard;
     }
 
@@ -49,10 +43,11 @@ class EventsController extends Controller
         return view('web.events.nearest');
     }
 
-    public function details(Event $event)
+    public function details(Event $event, GuestRepository $guests)
     {
+        /** @var $user User */
         $user = $this->guard->user();
-        $hasJoined = $this->guests->isGuestOfEvent($event, $user);
+        $hasJoined = $user && $guests->isGuestOfEvent($event, $user);
         $event->load('guests', 'guests.user');
 
         return view('web.events.details', [
@@ -66,19 +61,6 @@ class EventsController extends Controller
     {
         /** @var $user User */
         $user = $this->guard->user();
-
-        if ($this->guests->isGuestOfEvent($event, $user)) {
-            throw ValidationException::withMessages([
-               __('You are already joined to this event.')
-            ]);
-        }
-
-        if ($event->guests()->count() >= $event->max_guests_count) {
-            throw ValidationException::withMessages([
-                __('There is no free places for this event.')
-            ]);
-        }
-
         $manager->joinToEvent($event, $user);
 
         return back()->with('message', __('Successful join to event.'));

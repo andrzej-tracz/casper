@@ -1,10 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import config from 'config';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow, Circle } from 'react-google-maps';
 import { compose, withProps } from "recompose";
 import { EventInfo } from "./EventInfo";
 
 class EventsMap extends React.Component {
+
+  static propTypes = {
+    position: PropTypes.objectOf(PropTypes.number),
+    events: PropTypes.arrayOf(PropTypes.object)
+  };
 
   static defaultProps = {
     position: null,
@@ -79,8 +85,31 @@ class EventsMap extends React.Component {
     ));
   };
 
-  render() {
+  renderCurrentEventInfo = () => {
     const { selectedEvent } = this.state;
+
+    if (!this.state.showingInfoWindow) {
+      return;
+    }
+
+    if (!selectedEvent) {
+      return;
+    }
+
+    return (
+      <InfoWindow
+        onCloseClick={this.handleInfoBoxClose}
+        position={{
+          lat: selectedEvent.geo_lat,
+          lng: selectedEvent.geo_lng,
+        }}
+      >
+        <EventInfo event={selectedEvent} />
+      </InfoWindow>
+    );
+  };
+
+  render() {
 
     return (
       <div>
@@ -91,22 +120,12 @@ class EventsMap extends React.Component {
           defaultCenter={this.getDefaultCenterPosition()}
           center={this.getCenterPosition()}
         >
-          {this.renderEvents()}
           <Circle
             center={this.getCenterPosition()}
             radius={5000}
           />
-          {this.state.showingInfoWindow && selectedEvent && (
-            <InfoWindow
-              onCloseClick={this.handleInfoBoxClose}
-              position={{
-                lat: selectedEvent.geo_lat,
-                lng: selectedEvent.geo_lng,
-              }}
-            >
-              <EventInfo event={selectedEvent} />
-            </InfoWindow>
-          )}
+          {this.renderEvents()}
+          {this.renderCurrentEventInfo()}
         </GoogleMap>
       </div>
     );

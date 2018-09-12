@@ -1,0 +1,26 @@
+table {
+  td.options-wrapper {
+    padding: 0 5px;
+    vertical-align: middle;
+    width: 150px;
+    text-align: right;
+
+    .btn {
+      display: none;
+
+      + .btn {
+        margin-left: 4px;
+      }
+    }
+  }
+
+  tr {
+    &:hover {
+      td.options-wrapper {
+        .btn {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

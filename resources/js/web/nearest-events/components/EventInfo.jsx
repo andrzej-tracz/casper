@@ -8,7 +8,7 @@ const EventInfo = ({ event }) => (
     <div>
       <a
         href={`/event/${event.id}`}
-       target="_blank"
+        target="_blank"
       >
         Learn More
       </a>

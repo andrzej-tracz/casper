@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Events;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEventRequest extends FormRequest
@@ -13,7 +14,7 @@ class UpdateEventRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -24,7 +25,17 @@ class UpdateEventRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'sometimes|max:250',
+            'event_type' => 'sometimes|in:public,private',
+            'place' => 'sometimes|max:250',
+            'description' => 'sometimes|max:5000',
+            'date' => 'sometimes|date|date_format:Y-m-d',
+            'time' => 'sometimes|date_format:H:i',
+            'duration_minutes' => 'sometimes|numeric|min:0',
+            'max_guests_number' => 'sometimes|numeric|min:0',
+            'geo_lat' => ['sometimes','regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+            'geo_lng' => ['sometimes','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            'applications_ends_at' => 'sometimes|date|date_format:Y-m-d',
         ];
     }
 }

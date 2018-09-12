@@ -28,7 +28,7 @@ Route::group([
         'prefix' => 'ajax',
         'as' => 'ajax.',
     ], function () {
-        Route::get('nearest-events-search', 'API\EventsController@searchNearest');
+        Route::get('nearest-events-search', 'API\EventsController@searchNearest')->name('search');
     });
 });
 
@@ -44,7 +44,7 @@ Route::group([
         'as' => 'ajax.',
     ], function () {
         Route::resource('events', 'API\EventsController')->only([
-            'store', 'update', 'delete'
+            'index', 'show', 'store', 'update', 'destroy'
         ]);
     });
 });

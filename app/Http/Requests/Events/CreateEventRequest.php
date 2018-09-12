@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Events;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 class CreateEventRequest extends FormRequest
 {

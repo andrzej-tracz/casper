@@ -5,6 +5,7 @@ namespace Tests\Feature\API;
 use App\Casper\Model\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class EventsManagementTest extends TestCase
@@ -48,9 +49,9 @@ class EventsManagementTest extends TestCase
             'applications_ends_at' => Carbon::now()->addWeeks(2)->format('Y-m-d'),
         ]);
 
-        $response->assertOk();
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJson([
-            'event' => [
+            'data' => [
                 'name' => 'Test Event',
                 'event_type' => 'public',
                 'place' => 'Warsaw',

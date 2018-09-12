@@ -52,6 +52,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ],
+        "seed:test": "php artisan migrate:refresh --seed --env testing",
         "test": "vendor/bin/phpunit",
         "cs-fix": "php-cs-fixer fix app"
     },

@@ -29,7 +29,7 @@ class EventPolicy
      *
      * @return bool
      */
-    public function view(User $user, Event $event)
+    public function view(?User $user, Event $event)
     {
         if ($event->isPublic()) {
             return true;
@@ -52,6 +52,18 @@ class EventPolicy
     }
 
     /**
+     * Determine if the given event can be deleted by the user.
+     *
+     * @param User $user
+     * @param Event $event
+     * @return bool
+     */
+    public function destroy(User $user, Event $event)
+    {
+        return $user->id === $event->user_id;
+    }
+
+    /**
      * @param User $user
      * @param Event $event
      * @return bool
@@ -62,6 +74,6 @@ class EventPolicy
             return true;
         }
 
-        return false;
+        return $user->id === $event->user_id;
     }
 }

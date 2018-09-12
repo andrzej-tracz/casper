@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { FormField, Textarea, Switch, MapField } from '../../../abstract/components';
 import { EVENTS_FORM_ID } from "../constants";
 import Validator from 'validatorjs';
+import PropTypes from 'prop-types';
 
 const validate = values => {
 
@@ -25,6 +26,24 @@ const validate = values => {
   if (validator.fails()) {
     return validator.errors.all();
   }
+};
+
+const renderMapField = (props) => {
+  const { isEdit } = props;
+  const { lat, lng } = _.get(props, 'initialValues.position', {});
+
+  if (isEdit && (!lat || !lng)) {
+    return;
+  }
+
+  return (
+    <Field
+      name="position"
+      lavel="Choose a place of event"
+      component={MapField}
+      requestBrowserLocation={!props.isEdit}
+    />
+  );
 };
 
 let EventForm = props => {
@@ -85,20 +104,28 @@ let EventForm = props => {
         component={FormField}
         type="date"
       />
-      <Field
-        name="position"
-        lavel="Choose a place of event"
-        component={MapField}
-      />
-      <button
-        className="btn btn-primary mb-1 mt-1"
-        type="submit"
-        disabled={submitting}
+      {renderMapField(props)}
+      <div
+        className="text-right"
       >
-        Submit
-      </button>
+        <button
+          className="btn btn-primary mb-1 mt-1"
+          type="submit"
+          disabled={submitting}
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
+};
+
+EventForm.defaultProps = {
+  isEdit: false
+};
+
+EventForm.propTypes = {
+  isEdit: PropTypes.bool
 };
 
 EventForm = reduxForm({ form: EVENTS_FORM_ID, validate })(EventForm);

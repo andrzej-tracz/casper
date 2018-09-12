@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 const AddressField = (props) => (
   <div className="row">
@@ -16,6 +17,10 @@ const AddressField = (props) => (
 
 AddressField.defaultProps = {
   onChange: () => {}
+};
+
+AddressField.propTypes = {
+  onChange: PropTypes.func
 };
 
 export { AddressField };

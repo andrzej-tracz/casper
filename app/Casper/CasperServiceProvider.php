@@ -44,6 +44,7 @@ class CasperServiceProvider extends ServiceProvider
     {
         return [
             EventsRepository::class,
+            GuestRepository::class,
             EventManager::class,
             UserManager::class,
         ];

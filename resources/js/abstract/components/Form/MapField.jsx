@@ -6,21 +6,31 @@ const MapField = ({
   label,
   type,
   address,
+  requestBrowserLocation,
   meta: { touched, error, warning }
- }) => (
-  <div>
-    <label>{label}</label>
+ }) => {
+  return (
     <div>
-      {touched &&
+      <label>{label}</label>
+      <div>
+        {touched &&
         ((error && <span className="invalid-feedback">{error}</span>) || (warning && <span>{warning}</span>))
-      }
-      <EnhancedGoogleMap
-        isMarkerShown={true}
-        onMakerPositionChanged={input.onChange}
-        address={address}
-      />
+        }
+        <EnhancedGoogleMap
+          isMarkerShown={true}
+          requestBrowserLocation={requestBrowserLocation}
+          onMakerPositionChanged={input.onChange}
+          address={address}
+          position={input.value}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+MapField.defaultProps = {
+  address: null,
+  requestBrowserLocation: true,
+};
 
 export { MapField };

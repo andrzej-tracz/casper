@@ -3,12 +3,13 @@
 namespace App\Casper\Repository;
 
 use App\Casper\Model\Event;
+use App\Casper\Model\User;
 use Carbon\Carbon;
 
 class EventsRepository
 {
     /**
-     * Select all public upcoming events, which starts within given time period
+     * Fetches all public upcoming events, which starts within given time period
      *
      * @param int $days
      * @return mixed
@@ -19,7 +20,7 @@ class EventsRepository
     }
 
     /**
-     * Fetch nearest events which will appear within given radius of provided coordinates
+     * Fetches nearest events which will appear within given radius of provided coordinates
      *
      * @param $lat
      * @param $lng
@@ -44,6 +45,23 @@ class EventsRepository
                 ]
             )
             ->having('distance', '<=', $radius)
+            ->get();
+    }
+
+    /**
+     * Fetches events created by given user
+     *
+     * @param User $user
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fetchUserEvents(User $user)
+    {
+        return $user->events()
+            ->selectRaw(
+                'events.*, concat(events.date, " ", events.time) as event_date_time'
+            )
+            ->orderBy('event_date_time')
             ->get();
     }
 

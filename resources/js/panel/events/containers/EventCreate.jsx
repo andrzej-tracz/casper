@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import EventForm from "../components/EventForm";
 import { eventsActions } from "../actions";
+import { Link } from "react-router-dom";
 
 class EventCreate extends React.Component {
 
@@ -23,6 +24,16 @@ class EventCreate extends React.Component {
   render() {
     return (
       <div>
+        <div
+          className="text-right"
+        >
+          <Link
+            to="/"
+            className="btn btn-warning"
+          >
+            Back to List
+          </Link>
+        </div>
         <h3>Create new Event</h3>
         <EventForm
           onSubmit={this.handleCreateEvent}

@@ -15,6 +15,18 @@ class GoogleMapComponent extends React.Component {
     position: null
   };
 
+  static getDerivedStateFromProps(props) {
+    const { position: { lat, lng }} = props;
+
+    if (lat && lng) {
+      return {
+        position: props.position
+      }
+    }
+
+    return null;
+  }
+
   componentDidMount() {
     this.requestBrowserGeoLocation();
   }
@@ -64,6 +76,10 @@ class GoogleMapComponent extends React.Component {
   };
 
   requestBrowserGeoLocation = () => {
+    if (!this.props.requestBrowserLocation) {
+      return;
+    }
+
     if (!navigator.geolocation) {
       console.warn('Browser geolocation not supported');
 

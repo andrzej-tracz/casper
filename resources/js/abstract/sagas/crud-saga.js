@@ -84,10 +84,12 @@ class CrudSagas {
   getSagas() {
     const prefix = this.prefix;
     const self = this;
+
     if (!prefix) {
       throw new Error('Crud Saga prefix is not set.');
     }
-    return function* () {
+
+    return function * () {
       yield takeLatest(`${prefix}_FETCH/TRIGGER`, self.handleFetch, self);
       yield takeLatest(`${prefix}_CREATE/TRIGGER`, self.handleCreate, self);
       yield takeLatest(`${prefix}_READ/TRIGGER`, self.handleRead, self);

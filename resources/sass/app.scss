@@ -7,9 +7,12 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~react-redux-toastr/src/styles/index';
 
 // Components
 @import 'components/event-list-item';
+@import 'components/table';
+@import 'components/loader';
 
 .navbar-laravel {
   background-color: #fff;
