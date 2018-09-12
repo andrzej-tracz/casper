@@ -48,7 +48,7 @@ You can also create an additional **.env.testing** file which will cover environ
 
 ## Local development
 
-Start in-build PHP server:
+Start build-in PHP server:
 ```bash
 php artisan serve
 ```
@@ -63,13 +63,14 @@ npm run watch
 * Backend:
     * prepare **testing** environment - create **.env.testing** file and provide details
     * seed test database:
-       ```bash
+       ```
           composer seed:test
        ```
     * run the tests:
-        ```bash
+        ```
           composer test
         ```
+
 ## Deployment
 
 [Work in progress]
