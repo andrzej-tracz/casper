@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import EventForm from '../components/EventForm';
 import { eventsActions } from '../actions';
-import { Link, Switch, Route } from 'react-router-dom';
+import { NavLink, Switch, Route } from 'react-router-dom';
 import { Loader } from '../../../abstract/components';
 import { formatToValue } from '../../../abstract/utils';
+import EventGuestsList from './EventGuestList';
+import EventInvitations from './EventInvitations';
 
 class EventEdit extends React.Component {
 
@@ -60,21 +62,21 @@ class EventEdit extends React.Component {
   renderNavigation = () => (
     <ul className="nav nav-tabs">
       <li className="nav-item">
-        <a className="nav-link active" href={`#${this.props.match.url}`}>Attributes</a>
+        <NavLink exact to={this.props.match.url} className='nav-link' activeClassName="active">
+          Attributes
+        </NavLink>
       </li>
       <li className="nav-item">
-        <a className="nav-link" href={`#${this.props.match.url}/guests`}>Guests</a>
+        <NavLink to={`${this.props.match.url}/guests`} className='nav-link' activeClassName="active">
+          Guests
+        </NavLink>
       </li>
       <li className="nav-item">
-        <a className="nav-link" href={`#${this.props.match.url}/invitations`}>Invitations</a>
+        <NavLink to={`${this.props.match.url}/invitations`} className='nav-link' activeClassName="active">
+          Invitations
+        </NavLink>
       </li>
     </ul>
-  );
-
-  renderEventGuests = () => (
-    <div>
-      Guests
-    </div>
   );
 
   renderEventForm = () => (
@@ -88,24 +90,21 @@ class EventEdit extends React.Component {
   renderEditView = () => (
     <div className="p-2 pt-3 pb-3">
       <Switch>
-        <Route path={`${this.props.match.url}/guests`} component={this.renderEventGuests} />
+        <Route path={`${this.props.match.url}/guests`} component={EventGuestsList} />
+        <Route path={`${this.props.match.url}/invitations`} component={EventInvitations} />
         <Route path="/" component={this.renderEventForm} />
       </Switch>
     </div>
   );
 
   render() {
+
     return (
       <div>
-        <div
-          className='text-right'
-        >
-          <Link
-            to='/'
-            className='btn btn-warning'
-          >
+        <div className='text-right'>
+          <NavLink to='/' className='btn btn-warning'>
             Cancel
-          </Link>
+          </NavLink>
         </div>
         {this.props.isPending && (
           <Loader />

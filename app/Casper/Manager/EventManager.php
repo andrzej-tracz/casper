@@ -98,6 +98,19 @@ class EventManager
     }
 
     /**
+     * Removes guest instance
+     *
+     * @param Guest $guest
+     * @return bool|null
+     */
+    public function removeGuest(Guest $guest)
+    {
+        // TODO:: Add additional logic or notification when Guest being removed when necessary
+
+        return $guest->delete();
+    }
+
+    /**
      * Removes given event
      *
      * @param Event $event

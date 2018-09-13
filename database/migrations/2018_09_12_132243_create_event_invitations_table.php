@@ -36,8 +36,12 @@ class CreateEventInvitationsTable extends Migration
                 ->on('users');
 
             $table->unique('token');
-            $table->index('status');
+            $table->unique([
+                'event_id',
+                'invited_id',
+            ]);
 
+            $table->index('status');
             $table->timestamps();
         });
     }

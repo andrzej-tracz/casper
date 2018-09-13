@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Casper\Exceptions\EventInvitation\UserAlreadyInvitedException;
 use App\Casper\Manager\EventInvitationManager;
 use App\Casper\Model\EventInvitation;
 use App\Casper\Model\User;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Casper\Model\Event;
 use App\Http\Requests\EventInvitations\CreateEventInvitationRequest;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class EventInvitationsController extends Controller
@@ -79,9 +81,15 @@ class EventInvitationsController extends Controller
 
         $guest = $this->users->find($request->input('user_id'));
 
-        $invitation = $this->manager->inviteUserToEvent($user, $guest, $event);
+        try {
+            $invitation = $this->manager->inviteUserToEvent($user, $guest, $event);
 
-        return $this->respondWithItem($invitation, \Illuminate\Http\Response::HTTP_CREATED);
+            return $this->respondWithItem($invitation, \Illuminate\Http\Response::HTTP_CREATED);
+        } catch (UserAlreadyInvitedException $e) {
+            throw ValidationException::withMessages([
+                __('Selected user has been already invited to this event.')
+            ]);
+        }
     }
 
     /**

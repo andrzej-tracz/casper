@@ -1,6 +1,7 @@
 export * from './Form/FormField'
 export * from './Form/Textarea'
 export * from './Form/Switch'
+export * from './Form/AsyncSelect'
 export * from './Form/MapField'
 export * from './Table/Table'
 export * from './Loader/Loader'

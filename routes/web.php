@@ -45,11 +45,18 @@ Route::group([
     ], function () {
 
         Route::apiResource('events', 'API\EventsController');
+        Route::apiResource('guests', 'API\GuestController')
+            ->only([
+                'destroy'
+            ]);
+
         Route::apiResource('events.invitations', 'API\EventInvitationsController')
             ->only([
                 'index', 'store', 'destroy'
             ]);
         Route::put('events/invitations/{invitation}/accept', 'API\EventInvitationsController@accept')
             ->name('events.invitations.accept');
+
+        Route::get('users-search', 'API\UserController@search')->name('users.search');
     });
 });

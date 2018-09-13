@@ -2,11 +2,13 @@
 
 namespace App\Casper\Manager;
 
+use App\Casper\Repository\EventInvitationsRepository;
 use DB;
 use App\Casper\Model\User;
 use App\Casper\Model\EventInvitation;
 use App\Casper\Notifications\EventInvitation as EventInvitationNotification;
 use App\Casper\Model\Event;
+use App\Casper\Exceptions\EventInvitation\UserAlreadyInvitedException;
 
 class EventInvitationManager
 {
@@ -15,9 +17,12 @@ class EventInvitationManager
      */
     protected $eventManger;
 
-    public function __construct(EventManager $manager)
+    protected $repository;
+
+    public function __construct(EventManager $manager, EventInvitationsRepository $repository)
     {
         $this->eventManger = $manager;
+        $this->repository = $repository;
     }
 
     /**
@@ -28,9 +33,16 @@ class EventInvitationManager
      * @param Event $event
      *
      * @return EventInvitation
+     * @throws UserAlreadyInvitedException
      */
     public function inviteUserToEvent(User $creator, User $invited, Event $event)
     {
+        $oldInvitation = $this->repository->fetchByEventAndUser($event, $invited);
+
+        if ($oldInvitation instanceof EventInvitation) {
+            throw new UserAlreadyInvitedException();
+        }
+
         try {
             DB::beginTransaction();
 

@@ -64,6 +64,8 @@ class EventsController extends Controller
     {
         $this->authorize('view', $event);
 
+        $event->load('guests', 'guests.user', 'invitations', 'invitations.invited');
+
         return $this->respondWithItem($event);
     }
 

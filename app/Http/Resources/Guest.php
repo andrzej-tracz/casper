@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EventInvitation extends JsonResource
+class Guest extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,14 +16,11 @@ class EventInvitation extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'invited_id' => $this->resource->invited_id,
+            'user_id' => $this->resource->user_id,
             'event_id' => $this->resource->event_id,
-            'invited' => $this->whenLoaded('invited', [
-                'id' => $this->resource->invited->id,
-                'nickname' => $this->resource->invited->nickname,
-            ]),
-            'creator_id' => $this->resource->creator_id,
-            'status' => $this->resource->status,
+            'user' => [
+                'nickname' => $this->resource->user->nickname
+            ],
             'created_at' => (string) $this->resource->created_at,
             'updated_at' => (string) $this->resource->updated_at,
         ];

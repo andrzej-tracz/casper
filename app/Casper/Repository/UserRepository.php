@@ -16,8 +16,18 @@ class UserRepository extends AbstractEloquentRepository
         return User::class;
     }
 
-    public function searchUsers()
+    /**
+     * Seach Users by provided search string
+     *
+     * @param null $phrase
+     * @return mixed
+     */
+    public function searchUsers($phrase = null)
     {
-        //
+        return $this->query()
+            ->where('nickname', 'like', "%{$phrase}%")
+            ->orderBy('nickname')
+            ->take(10)
+            ->get();
     }
 }

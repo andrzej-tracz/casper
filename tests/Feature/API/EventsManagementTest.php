@@ -8,6 +8,12 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
+/**
+ * Class EventsManagementTest
+ * @package Tests\Feature\API
+ *
+ * @group events
+ */
 class EventsManagementTest extends TestCase
 {
     use DatabaseTransactions;

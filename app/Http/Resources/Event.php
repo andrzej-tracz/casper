@@ -28,6 +28,12 @@ class Event extends JsonResource
             'geo_lat' => $this->resource->geo_lat,
             'geo_lng' => $this->resource->geo_lng,
             'applications_ends_at' => (string) $this->resource->applications_ends_at,
+            'guests' => $this->whenLoaded('guests',
+                Guest::collection($this->resource->guests)
+            ),
+            'invitations' => $this->whenLoaded('invitations',
+                EventInvitation::collection($this->resource->invitations)
+            ),
             'created_at' => (string) $this->resource->created_at,
             'updated_at' => (string) $this->resource->updated_at,
         ];
