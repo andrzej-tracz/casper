@@ -79,7 +79,7 @@ class EventInvitationsManagementTest extends TestCase
     /**
      * @test
      */
-    public function it_creates_invitation_when_user_owns_event()
+    public function it_creates_invitation_when_user_is_creator_of_event()
     {
         $user = User::first();
         $event = $user->events()->save(factory(Event::class)->make());
@@ -109,11 +109,8 @@ class EventInvitationsManagementTest extends TestCase
         $this->actingAs($invited);
 
         \Notification::fake();
-
         $invitation = $manager->inviteUserToEvent($user, $invited, $event);
-
         \Notification::assertSentTo([$invited], EventInvitationNotification::class);
-        \Notification::assertNotSentTo([$user], AnotherNotification::class);
 
         $response = $this->put("panel/ajax/events/invitations/{$invitation->id}/accept", [], [
             'Accept' => 'application/json'
