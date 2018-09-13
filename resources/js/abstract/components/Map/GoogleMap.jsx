@@ -12,7 +12,8 @@ class GoogleMapComponent extends React.Component {
   geocoder = null;
 
   state = {
-    position: null
+    position: null,
+    markerDragging: false
   };
 
   static getDerivedStateFromProps(props) {
@@ -29,6 +30,11 @@ class GoogleMapComponent extends React.Component {
 
   componentDidMount() {
     this.requestBrowserGeoLocation();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+
+    return !nextState.markerDragging;
   }
 
   onPositionChanged = () => {
@@ -114,7 +120,20 @@ class GoogleMapComponent extends React.Component {
     return this.getDefaultCenterPosition();
   };
 
+  handleMarkerStartDrag = () => {
+    this.setState({
+      markerDragging: true
+    });
+  };
+
+  handleMarkerStopDrag = () => {
+    this.setState({
+      markerDragging: false
+    })
+  };
+
   render() {
+
     return (
       <div>
         <GoogleMap
@@ -129,6 +148,8 @@ class GoogleMapComponent extends React.Component {
               draggable={true}
               ref={this.onMarkerMounted}
               onPositionChanged={this.onPositionChanged}
+              onDragStart={this.handleMarkerStartDrag}
+              onDragEnd={this.handleMarkerStopDrag}
             />
           )}
         </GoogleMap>

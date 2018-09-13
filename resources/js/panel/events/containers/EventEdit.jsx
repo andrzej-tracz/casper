@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import EventForm from "../components/EventForm";
-import { eventsActions } from "../actions";
-import { Link } from "react-router-dom";
-import { Loader } from "../../../abstract/components";
-import { formatToValue } from "../../../abstract/utils";
+import EventForm from '../components/EventForm';
+import { eventsActions } from '../actions';
+import { Link, Switch, Route } from 'react-router-dom';
+import { Loader } from '../../../abstract/components';
+import { formatToValue } from '../../../abstract/utils';
 
 class EventEdit extends React.Component {
 
@@ -57,15 +57,52 @@ class EventEdit extends React.Component {
     return values;
   };
 
+  renderNavigation = () => (
+    <ul className="nav nav-tabs">
+      <li className="nav-item">
+        <a className="nav-link active" href={`#${this.props.match.url}`}>Attributes</a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href={`#${this.props.match.url}/guests`}>Guests</a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href={`#${this.props.match.url}/invitations`}>Invitations</a>
+      </li>
+    </ul>
+  );
+
+  renderEventGuests = () => (
+    <div>
+      Guests
+    </div>
+  );
+
+  renderEventForm = () => (
+    <EventForm
+      onSubmit={this.handleEventSave}
+      initialValues={this.getInitialFormValues()}
+      isEdit={true}
+    />
+  );
+
+  renderEditView = () => (
+    <div className="p-2 pt-3 pb-3">
+      <Switch>
+        <Route path={`${this.props.match.url}/guests`} component={this.renderEventGuests} />
+        <Route path="/" component={this.renderEventForm} />
+      </Switch>
+    </div>
+  );
+
   render() {
     return (
       <div>
         <div
-          className="text-right"
+          className='text-right'
         >
           <Link
-            to="/"
-            className="btn btn-warning"
+            to='/'
+            className='btn btn-warning'
           >
             Cancel
           </Link>
@@ -75,11 +112,8 @@ class EventEdit extends React.Component {
         ) || (
           <React.Fragment>
             <h3>Edit Event</h3>
-            <EventForm
-              onSubmit={this.handleEventSave}
-              initialValues={this.getInitialFormValues()}
-              isEdit={true}
-            />
+            {this.renderNavigation()}
+            {this.renderEditView()}
           </React.Fragment>
         )}
       </div>

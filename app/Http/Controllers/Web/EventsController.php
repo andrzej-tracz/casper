@@ -8,7 +8,6 @@ use App\Casper\Model\User;
 use App\Casper\Repository\EventsRepository;
 use App\Casper\Repository\GuestRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Guard;
 
 class EventsController extends Controller
@@ -29,6 +28,11 @@ class EventsController extends Controller
         $this->guard = $guard;
     }
 
+    /**
+     * Renders Upcoming Events page
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function upcomingEvents()
     {
         $upcomingEvents = $this->events->fetchPublicUpcomingEvents();
@@ -38,11 +42,23 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Renders Nearest Events page
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function nearest()
     {
         return view('web.events.nearest');
     }
 
+    /**
+     * Renders Event details page
+     *
+     * @param Event $event
+     * @param GuestRepository $guests
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function details(Event $event, GuestRepository $guests)
     {
         /** @var $user User */
@@ -57,6 +73,13 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Handles joining to public events
+     *
+     * @param Event $event
+     * @param EventManager $manager
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function join(Event $event, EventManager $manager)
     {
         /** @var $user User */

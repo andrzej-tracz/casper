@@ -35,6 +35,7 @@ class CasperServiceProvider extends ServiceProvider
     {
         $this->app->singleton(EventManager::class);
         $this->app->singleton(UserManager::class);
+        $this->app->singleton(EventInvitationManager::class);
     }
 
     /**
@@ -47,6 +48,7 @@ class CasperServiceProvider extends ServiceProvider
             GuestRepository::class,
             EventManager::class,
             UserManager::class,
+            EventInvitationManager::class,
         ];
     }
 }

@@ -76,4 +76,16 @@ class EventPolicy
 
         return $user->id === $event->user_id;
     }
+
+    /**
+     * Determine if the given user can create event invitations
+     *
+     * @param User $user
+     * @param Event $event
+     * @return bool
+     */
+    public function invitations(User $user, Event $event)
+    {
+        return $user->id === $event->user_id;
+    }
 }

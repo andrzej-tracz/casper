@@ -43,8 +43,13 @@ Route::group([
         'prefix' => 'ajax',
         'as' => 'ajax.',
     ], function () {
-        Route::resource('events', 'API\EventsController')->only([
-            'index', 'show', 'store', 'update', 'destroy'
-        ]);
+
+        Route::apiResource('events', 'API\EventsController');
+        Route::apiResource('events.invitations', 'API\EventInvitationsController')
+            ->only([
+                'index', 'store', 'destroy'
+            ]);
+        Route::put('events/invitations/{invitation}/accept', 'API\EventInvitationsController@accept')
+            ->name('events.invitations.accept');
     });
 });

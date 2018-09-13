@@ -6,6 +6,7 @@ use App\Casper\Model\Event;
 use App\Casper\Model\Guest;
 use App\Casper\Model\User;
 use App\Casper\Repository\GuestRepository;
+use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 
 class EventManager
@@ -70,6 +71,21 @@ class EventManager
         if ($event->guests()->count() >= $event->max_guests_number) {
             throw ValidationException::withMessages([
                 __('There is no free places for this event.')
+            ]);
+        }
+
+        if (Carbon::now() > $event->applications_ends_at) {
+            throw ValidationException::withMessages([
+                __('Joining to this event has expired')
+            ]);
+        }
+
+        $eventDateTime = new Carbon($event->date);
+        $eventDateTime->setTimeFromTimeString($event->time);
+
+        if (Carbon::now() > $eventDateTime) {
+            throw ValidationException::withMessages([
+                __('This event has already took place')
             ]);
         }
 

@@ -51,6 +51,14 @@ class Event extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invitations()
+    {
+        return $this->hasMany(EventInvitation::class);
+    }
+
+    /**
      * @param Builder $query
      * @return Builder
      */
