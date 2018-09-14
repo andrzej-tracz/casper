@@ -100,16 +100,11 @@ class EventsRepository extends AbstractEloquentRepository
     protected function includeUserScopedEvents(Builder $query, User $user)
     {
         return $query->orWhere(function (Builder $q) use ($user) {
-            $q->whereHas('guests',function (Builder $guests) use ($user) {
-
+            $q->whereHas('guests', function (Builder $guests) use ($user) {
                 return $guests->where('user_id', $user->id);
-
             })->orWhereHas('invitations', function (Builder $invitations) use ($user) {
-
                 return $invitations->where('user_id', $user->id);
-
             })->orWhereHas('user', function (Builder $query) use ($user) {
-
                 return $query->where('id', $user->id);
             });
         });
