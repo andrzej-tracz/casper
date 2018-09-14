@@ -3,7 +3,9 @@
 namespace App\Policies;
 
 use App\Casper\Model\Event;
+use App\Casper\Model\EventInvitation;
 use App\Casper\Model\User;
+use App\Casper\Repository\EventInvitationsRepository;
 use App\Casper\Repository\GuestRepository;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -16,9 +18,15 @@ class EventPolicy
      */
     protected $guests;
 
-    public function __construct(GuestRepository $repository)
+    /**
+     * @var EventInvitationsRepository
+     */
+    protected $invitations;
+
+    public function __construct(GuestRepository $repository, EventInvitationsRepository $invitations)
     {
         $this->guests = $repository;
+        $this->invitations = $invitations;
     }
 
     /**
@@ -33,6 +41,18 @@ class EventPolicy
     {
         if ($event->isPublic()) {
             return true;
+        }
+
+        if (null == $user) {
+            return false;
+        }
+
+        if ($user && $this->guests->isGuestOfEvent($event, $user)) {
+            return true;
+        }
+
+        if ($user && $invitation = $this->invitations->fetchByEventAndUser($event, $user)) {
+            return $invitation instanceof EventInvitation;
         }
 
         return $user->id === $event->user_id;
@@ -72,6 +92,10 @@ class EventPolicy
     {
         if ($event->isPublic()) {
             return true;
+        }
+
+        if ($invitation = $this->invitations->fetchByEventAndUser($event, $user)) {
+            return $invitation instanceof EventInvitation;
         }
 
         return $user->id === $event->user_id;

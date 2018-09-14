@@ -4,6 +4,7 @@ namespace App\Http\Requests\EventInvitations;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Auth;
+use Illuminate\Validation\Rule;
 
 class CreateEventInvitationRequest extends FormRequest
 {
@@ -24,8 +25,24 @@ class CreateEventInvitationRequest extends FormRequest
      */
     public function rules()
     {
+        $user = $this->user();
+        $rules = [
+            'required', 'numeric'
+        ];
+
+        if ($user) {
+            $rules[] = Rule::notIn([ $user->id ]);
+        }
+
         return [
-            'user_id' => 'required|numeric',
+            'user_id' => $rules,
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'user_id.not_in' => __('Can not invite to event yourself.')
         ];
     }
 }

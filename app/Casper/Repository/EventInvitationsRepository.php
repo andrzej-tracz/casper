@@ -3,10 +3,22 @@
 namespace App\Casper\Repository;
 
 use App\Casper\Model\Event;
+use App\Casper\Model\EventInvitation;
 use App\Casper\Model\User;
 
 class EventInvitationsRepository
 {
+    /**
+     * Finds invitations by given token
+     *
+     * @param $token
+     * @return EventInvitation|\Illuminate\Database\Eloquent\Model|null|object
+     */
+    public function findByToken($token)
+    {
+        return EventInvitation::where('token', $token)->first();
+    }
+
     /**
      * @param Event $event
      * @return \Illuminate\Database\Eloquent\Collection

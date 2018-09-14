@@ -4,19 +4,22 @@ namespace App\Casper\Repository;
 
 use App\Casper\Model\Event;
 use App\Casper\Model\User;
+use App\Eloquent\Repository\AbstractEloquentRepository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
-class EventsRepository
+class EventsRepository extends AbstractEloquentRepository
 {
     /**
      * Fetches all public upcoming events, which starts within given time period
      *
+     * @param User|null $user
      * @param int $days
      * @return mixed
      */
-    public function fetchPublicUpcomingEvents($days = 30)
+    public function fetchPublicUpcomingEvents(User $user = null, $days = 30)
     {
-        return $this->createUpcomingEventsQuery($days)->get();
+        return $this->createUpcomingEventsQuery($user, $days)->get();
     }
 
     /**
@@ -33,7 +36,6 @@ class EventsRepository
             $radius = 5;
         }
 
-        // TODO:: Attach private events here when invitations will be done
         return $this
             ->createUpcomingEventsQuery()
             ->selectRaw(
@@ -68,16 +70,58 @@ class EventsRepository
     /**
      * Create initial query for upcoming events
      *
+     * @param User|null $user
      * @param int $days
      * @return mixed
      */
-    protected function createUpcomingEventsQuery($days = 30)
+    protected function createUpcomingEventsQuery(User $user = null, $days = 30)
     {
-        return Event::onlyPublic()
+        return Event::where(function ($query) use ($user) {
+            $query->onlyPublic();
+
+            if ($user) {
+                $this->includeUserScopedEvents($query, $user);
+            }
+        })
             ->where('date', '<=', Carbon::now()->addDays($days))
             ->selectRaw(
                 'events.*, concat(events.date, " ", events.time) as event_date_time'
             )
             ->having('event_date_time', '>=', Carbon::now());
+    }
+
+    /**
+     * Includes within given query events when user has been invited or joined as guest
+     *
+     * @param Builder $query
+     * @param User $user
+     * @return Builder
+     */
+    protected function includeUserScopedEvents(Builder $query, User $user)
+    {
+        return $query->orWhere(function (Builder $q) use ($user) {
+            $q->whereHas('guests',function (Builder $guests) use ($user) {
+
+                return $guests->where('user_id', $user->id);
+
+            })->orWhereHas('invitations', function (Builder $invitations) use ($user) {
+
+                return $invitations->where('user_id', $user->id);
+
+            })->orWhereHas('user', function (Builder $query) use ($user) {
+
+                return $query->where('id', $user->id);
+            });
+        });
+    }
+
+    /**
+     * Returns the Model class of repository
+     *
+     * @return string
+     */
+    protected function getModelClass()
+    {
+        return Event::class;
     }
 }

@@ -20,7 +20,19 @@ class EventInvitationPolicy
      */
     public function view(User $user, EventInvitation $invitation)
     {
-        return $this->isCreator($user, $invitation);
+        return $this->isCreator($user, $invitation) || $this->isInvited($user, $invitation);
+    }
+
+    /**
+     * Determine if the given invitation can be visited by the user.
+     *
+     * @param User $user
+     * @param EventInvitation $invitation
+     * @return bool
+     */
+    public function visit(User $user, EventInvitation $invitation)
+    {
+        return $this->isInvited($user, $invitation);
     }
 
     /**

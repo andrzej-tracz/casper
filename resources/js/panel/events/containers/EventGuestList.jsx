@@ -9,21 +9,18 @@ class EventGuestList extends React.Component {
     this.props.removeGuest(guest);
   };
 
-  renderRowOptions = (guest) => {
-    return (
-      <div>
-        <button
-          className="btn btn-danger"
-          onClick={() => this.handleGuestRemove(guest)}
-        >
-          Delete
-        </button>
-      </div>
-    );
-  };
+  renderRowOptions = (guest) => (
+    <div>
+      <button
+        className="btn btn-danger"
+        onClick={() => this.handleGuestRemove(guest)}
+      >
+        Delete
+      </button>
+    </div>
+  );
 
   renderGuestsList = () => {
-
     const columns = [{
       label: "Username",
       value: guest => {
@@ -49,7 +46,6 @@ class EventGuestList extends React.Component {
   };
 
   render() {
-
     return (
       <div>
         {this.props.isPending && (

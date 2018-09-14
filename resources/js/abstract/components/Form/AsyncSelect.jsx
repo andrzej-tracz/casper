@@ -16,7 +16,7 @@ const AsyncSelect = ({
     <div>
       <label>
         {error && (
-          (error && <span className="text-danger">{error}</span> ) || ( warning && <span>{warning}</span>)
+          (error && <span>{error}</span> ) || ( warning && <span>{warning}</span>)
         ) || label}
       </label>
       <div>
@@ -27,6 +27,7 @@ const AsyncSelect = ({
           onInputChange={onInputChange}
           onChange={input.onChange}
           value={input.value}
+          clearable
         />
       </div>
 

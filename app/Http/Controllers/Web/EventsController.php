@@ -35,7 +35,8 @@ class EventsController extends Controller
      */
     public function upcomingEvents()
     {
-        $upcomingEvents = $this->events->fetchPublicUpcomingEvents();
+        $user = $this->guard->user();
+        $upcomingEvents = $this->events->fetchPublicUpcomingEvents($user);
 
         return view('web.events.upcoming', [
             'events' => $upcomingEvents

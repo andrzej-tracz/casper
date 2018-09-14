@@ -26,7 +26,7 @@ class EventInvitations extends React.Component {
       label: "Status",
       value: invitation => {
         const labels = {
-          new: <span>Waiting for response</span>,
+          new: <span>Pending</span>,
           accepted: <span className="text-success">Accepted</span>,
           rejected: <span className="text-danger">Rejected</span>,
         };
@@ -38,7 +38,7 @@ class EventInvitations extends React.Component {
     if (0 === this.props.invitations.length) {
       return (
         <div className="alert alert-info">
-          There are no guests attached to this event yet
+          There are no invitations yet
         </div>
       );
     }
@@ -59,10 +59,11 @@ class EventInvitations extends React.Component {
           <Loader />
         ) || (
           <div>
+            {this.renderInvitationsList()}
             <EventInvitationForm
               onSubmit={this.handleInvitationSubmit}
+              eventId={this.props.event.id}
             />
-            {this.renderInvitationsList()}
           </div>
         )}
       </div>
@@ -72,9 +73,10 @@ class EventInvitations extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    event: state.currentEvent.event,
+    event: state.currentEvent.event || {},
     invitations: state.currentEvent.event && state.currentEvent.event.invitations || [],
-    isPending: state.currentEvent.pending
+    isPending: state.currentEvent.pending,
+    invitationsPending: state.currentEvent.invitationsPending
   }
 };
 

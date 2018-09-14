@@ -33,30 +33,37 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'panel',
-    'middleware' => 'auth',
-    'as' => 'panel.'
+    'middleware' => 'auth'
 ], function () {
-    Route::get('events', 'Panel\EventsController@index')->name('events.index');
+
+    Route::get('invitation/{token}', 'Web\EventInvitationsController@show')->name('events.invitation.show');
+    Route::put('invitation/{invitation}/accept', 'Web\EventInvitationsController@accept')->name('events.invitation.accept');
 
     Route::group([
-        'prefix' => 'ajax',
-        'as' => 'ajax.',
+        'prefix' => 'panel',
+        'as' => 'panel.'
     ], function () {
+        Route::get('events', 'Panel\EventsController@index')->name('events.index');
 
-        Route::apiResource('events', 'API\EventsController');
-        Route::apiResource('guests', 'API\GuestController')
-            ->only([
-                'destroy'
-            ]);
+        Route::group([
+            'prefix' => 'ajax',
+            'as' => 'ajax.',
+        ], function () {
 
-        Route::apiResource('events.invitations', 'API\EventInvitationsController')
-            ->only([
-                'index', 'store', 'destroy'
-            ]);
-        Route::put('events/invitations/{invitation}/accept', 'API\EventInvitationsController@accept')
-            ->name('events.invitations.accept');
+            Route::apiResource('events', 'API\EventsController');
+            Route::apiResource('guests', 'API\GuestController')
+                ->only([
+                    'destroy'
+                ]);
 
-        Route::get('users-search', 'API\UserController@search')->name('users.search');
+            Route::apiResource('events.invitations', 'API\EventInvitationsController')
+                ->only([
+                    'index', 'store', 'destroy'
+                ]);
+            Route::put('events/invitations/{invitation}/accept', 'API\EventInvitationsController@accept')
+                ->name('events.invitations.accept');
+
+            Route::get('users-search', 'API\UserController@search')->name('users.search');
+        });
     });
 });

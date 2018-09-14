@@ -56,4 +56,20 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class, 'guests', 'user_id', 'event_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function eventInvitations()
+    {
+        return $this->hasMany(EventInvitation::class, 'invited_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function createdEventInvitations()
+    {
+        return $this->hasMany(EventInvitation::class, 'creator_id');
+    }
 }

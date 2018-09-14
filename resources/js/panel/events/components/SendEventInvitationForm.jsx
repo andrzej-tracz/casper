@@ -2,6 +2,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { AsyncSelect } from '../../../abstract/components';
 import { EVENTS_INVITATION_FORM_ID } from "../constants";
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
 const validate = values => {
@@ -16,13 +17,14 @@ const validate = values => {
 
 let SendEventInvitationForm = props => {
 
-  const { handleSubmit, submitting } = props;
+  const { handleSubmit, submitting, eventId } = props;
 
   const loadUsers = (value) => {
     return axios
       .get('/panel/ajax/users-search', {
         params: {
-          search: value
+          search: value,
+          event_id: eventId
         }
       })
       .then((xhr) => xhr.data)
@@ -58,6 +60,11 @@ let SendEventInvitationForm = props => {
       </div>
     </form>
   );
+};
+
+SendEventInvitationForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  eventId: PropTypes.number.isRequired,
 };
 
 SendEventInvitationForm = reduxForm({ form: EVENTS_INVITATION_FORM_ID, validate })(SendEventInvitationForm);

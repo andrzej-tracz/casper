@@ -24,6 +24,10 @@ class EventInvitation extends Model
         });
     }
 
+    protected $hidden = [
+        'token'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -46,5 +50,35 @@ class EventInvitation extends Model
     public function creator()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Determine if invitation is new
+     *
+     * @return bool
+     */
+    public function isNew()
+    {
+        return $this->status === static::STATUS_NEW;
+    }
+
+    /**
+     * Determine if invitation is accepted
+     *
+     * @return bool
+     */
+    public function isAccepted()
+    {
+        return $this->status === static::STATUS_ACCEPTED;
+    }
+
+    /**
+     * Determine if invitation is rejected
+     *
+     * @return bool
+     */
+    public function isRejected()
+    {
+        return $this->status === static::STATUS_REJECTED;
     }
 }

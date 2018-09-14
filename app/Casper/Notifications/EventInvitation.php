@@ -49,7 +49,9 @@ class EventInvitation extends Notification implements ShouldQueue
         return (new MailMessage)
                     ->line('You have been invited to event.')
                     ->line($this->invitation->event->name)
-                    ->action('Join Event', url('/'));
+                    ->action('Join Event', route('events.invitation.show', [
+                        'token' => $this->invitation->token
+                    ]));
     }
 
     /**

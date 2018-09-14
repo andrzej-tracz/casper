@@ -9,6 +9,7 @@ use App\Casper\Model\EventInvitation;
 use App\Casper\Notifications\EventInvitation as EventInvitationNotification;
 use App\Casper\Model\Event;
 use App\Casper\Exceptions\EventInvitation\UserAlreadyInvitedException;
+use Illuminate\Validation\ValidationException;
 
 class EventInvitationManager
 {
@@ -59,7 +60,6 @@ class EventInvitationManager
             DB::commit();
 
             return $invitation;
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
@@ -85,6 +85,12 @@ class EventInvitationManager
      */
     public function acceptInvitation(EventInvitation $invitation)
     {
+        if ($invitation->status != EventInvitation::STATUS_NEW) {
+            throw ValidationException::withMessages([
+                __('This invitation has been already accepted')
+            ]);
+        }
+
         $event = $invitation->event;
         $invited = $invitation->invited;
 

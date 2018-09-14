@@ -14,7 +14,7 @@ function * handleInvitationCreate(action) {
       data: action.payload
     });
 
-    yield put({ type: invitationsActions.create.SUCCESS, payload: response });
+    yield put({ type: invitationsActions.create.SUCCESS, payload: response.data });
     yield call(notify().success, 'Success', 'Invitation to event has been send');
 
   } catch (error) {
@@ -29,6 +29,12 @@ function * handleFailedInvitationCreate(action) {
 
   if (errors && errors.length) {
     for (let error of errors[0]) {
+      yield call(notify().error, 'Error', error);
+    }
+  }
+
+  if (errors && errors.user_id) {
+    for (let error of errors.user_id) {
       yield call(notify().error, 'Error', error);
     }
   }

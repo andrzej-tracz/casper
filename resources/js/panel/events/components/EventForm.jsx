@@ -88,7 +88,7 @@ let EventForm = props => {
       />
       <Field
         name="duration_minutes"
-        label="Duration"
+        label="Duration (minutes)"
         component={FormField}
         type="number"
       />
