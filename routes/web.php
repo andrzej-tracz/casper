@@ -17,6 +17,9 @@ Route::get('nearest-events', 'Web\EventsController@nearest')->name('web.events.n
 
 Auth::routes();
 
+Route::get('auth/fb/redirect', 'Auth\SocialFacebookController@redirect')->name('auth.fb.redirect');
+Route::get('auth/fb/callback', 'Auth\SocialFacebookController@callback')->name('auth.fb.callback');
+
 Route::group([
     'prefix' => 'event',
     'as' => 'web.event.'
