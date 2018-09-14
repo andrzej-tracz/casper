@@ -64,7 +64,7 @@
                         </div>
 
                         <div class="form-group row mt-2">
-                            <div class="col-md-8 col-md-offset-4">
+                            <div class="col-md-8 offset-md-4">
                                 <a href="{{ route('auth.fb.redirect') }}" class="btn btn-primary">Login with Facebook</a>
                             </div>
                         </div>
