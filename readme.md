@@ -73,7 +73,18 @@ npm run watch
 
 ## Deployment
 
-[Work in progress]
+Deployments are handling by [Deployer](https://deployer.org/) - which is simple and quite good solution for
+continuous delivery.
+All configuration stuff is available inside **deploy.php** file in project directory root.
+Please ensure that you have access to defined server in config file.
+If everything is properly prepared, then you can run it.
+
+To deploy app into development server run:
+
+```bash
+composer deploy:dev
+```
+
 
 ## Built With
 
