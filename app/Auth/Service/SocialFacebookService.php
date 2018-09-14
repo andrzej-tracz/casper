@@ -50,7 +50,7 @@ class SocialFacebookService
         if (!$user) {
             $user = User::create([
                 'email' => $providerUser->getEmail(),
-                'name' => $providerUser->getName(),
+                'nickname' => $providerUser->getName(),
                 'password' => md5(rand(1, 10000)),
             ]);
         }
