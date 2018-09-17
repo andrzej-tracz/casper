@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+role=${CONTAINER_ROLE:-app}
+queue_name=${QUEUE_NAME:-default}
+
+if [ "$role" = "QUEUE_WORKER" ]; then
+    echo "Running as Queue Worker"
+    php artisan queue:work --tries=3 --sleep=3 --queue=$queue_name
+else
+    echo "Running as PHP-FPM handler"
+    exec php-fpm
+fi

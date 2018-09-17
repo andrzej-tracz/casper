@@ -1,0 +1,92 @@
+version: '3.5'
+
+services:
+
+    fed:
+        container_name: ${APP_NAME}_fed_dev
+        image: node:8
+        volumes:
+        - ./:/app
+        working_dir: /app
+        command: npm run watch
+
+    web:
+        container_name: ${APP_NAME}_web_dev
+        build:
+            context: ./_docker/web
+        working_dir: /var/www
+        volumes:
+        - ./public:/var/www/public
+        links:
+        - app
+        ports:
+        - ${WEB_PORT}:8080
+        depends_on:
+        - app
+
+    app:
+        container_name: ${APP_NAME}_app_dev
+        build:
+            context: ./_docker/php
+        working_dir: /var/www
+        env_file:
+        - .env
+        volumes:
+        - ./.data/storage/logs:/var/www/storage/logs
+        - ./.data/bootstrap/cache:/var/www/bootstrap/cache
+        - ./.data/storage/framework:/var/www/storage/framework
+        - ./:/var/www
+        links:
+        - database
+        depends_on:
+        - database
+
+    app_test:
+        container_name: ${APP_NAME}_app_test
+        build:
+            context: ./_docker/php
+        working_dir: /var/www
+        env_file:
+        - .env.testing
+        volumes:
+        - ./:/var/www
+        links:
+        - database_test
+        depends_on:
+        - database_test
+
+    database:
+        container_name: ${APP_NAME}_database_dev
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        volumes:
+        - ./.data/mysql:/var/lib/mysql
+        - ./.data/init-db:/docker-entrypoint-initdb.d
+
+    database_test:
+        container_name: ${APP_NAME}_database_test
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        volumes:
+        - ./.data/mysql_test:/var/lib/mysql
+        - ./.data/init-db:/docker-entrypoint-initdb.d
+
+    phpmyadmin:
+        container_name: ${APP_NAME}_pma_dev
+        image: phpmyadmin/phpmyadmin
+        links:
+        - database:db
+        ports:
+        - ${PHPMYADMIN_PORT}:80
+        environment:
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
