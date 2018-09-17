@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('content')
+    @include('components.alerts')
     <div class="container">
         @if(!empty($events))
             <div class="row mb-4">
