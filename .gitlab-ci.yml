@@ -1,5 +1,11 @@
 image: andrzejtracz/php-node
 
+variables:
+  MYSQL_DATABASE: casper_test
+
+services:
+  - mysql:5.7
+
 cache:
   paths:
     - node_modules/
@@ -22,3 +28,5 @@ test:
     - node -v
     - npm -v
     - composer install
+    - composer seed:test
+    - composer test
