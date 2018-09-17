@@ -16,6 +16,27 @@ set('git_tty', true);
 add('shared_files', []);
 add('shared_dirs', []);
 
+// Relative paths to remove from server
+add('clear_paths', [
+    '.git',
+    '_docker',
+    'tests',
+    '.babelrc',
+    '.editorconfig',
+    '.env.example',
+    '.gitattributes',
+    '.gitignore',
+    '.gitlab-ci.yaml',
+    'docker-compose.yaml',
+    'Makefile',
+    'phpunit.xml',
+    'server.php',
+    'webpack.mix.js',
+    'changelog.md',
+    'readme.md',
+    'deploy.php',
+]);
+
 // Writable dirs by web server 
 add('writable_dirs', []);
 set('allow_anonymous_stats', false);
@@ -31,6 +52,18 @@ host('atracz.saturn.polcode.com')
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
+desc('Execute artisan optimize');
+task('artisan:optimize', function () {
+    run('{{bin/php}} {{release_path}}/artisan optimize');
+});
+
+desc('Build project assets');
+task('deploy:assets', function () {
+    runLocally('npm install');
+    runLocally('npm run prod');
+    upload('public', '{{release_path}}');
+});
+
 /**
  * Main task
  */
@@ -44,12 +77,14 @@ task('deploy', [
     'deploy:update_code',
     'deploy:shared',
     'deploy:vendors',
+    'deploy:assets',
     'deploy:writable',
     'artisan:storage:link',
     'artisan:view:clear',
     'artisan:cache:clear',
     'artisan:config:cache',
     'artisan:optimize',
+    'deploy:clear_paths',
     'artisan:migrate',
     'deploy:symlink',
     'deploy:unlock',
