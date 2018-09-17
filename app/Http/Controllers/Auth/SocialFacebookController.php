@@ -10,13 +10,23 @@ use App\Http\Controllers\Controller;
 class SocialFacebookController extends Controller
 {
     /**
+     * @var \Laravel\Socialite\Contracts\Factory
+     */
+    protected $socialite;
+
+    public function __construct(\Laravel\Socialite\Contracts\Factory $socialite)
+    {
+        $this->socialite = $socialite;
+    }
+
+    /**
      * Create a redirect method to facebook api.
      *
      * @return
      */
     public function redirect()
     {
-        return Socialite::driver('facebook')
+        return $this->getFacebookProvider()
             ->redirectUrl(route('auth.fb.callback'))
             ->redirect();
     }
@@ -30,10 +40,25 @@ class SocialFacebookController extends Controller
      */
     public function callback(SocialFacebookService $service)
     {
-        /** @var $user User */
-        $user = $service->createOrGetUser(Socialite::driver('facebook')->user());
-        auth()->login($user);
+        try {
+            $facebookUser = $this->getFacebookProvider()->user();
+            /** @var $user User */
+            $user = $service->createOrGetUser($facebookUser);
+            auth()->login($user);
 
-        return redirect()->to('/');
+            return redirect()->to('/');
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return redirect()->to('/')->withErrors(
+                __('An error occurred during authorization, please try again.')
+            );
+        }
+    }
+
+    /**
+     * @return \Laravel\Socialite\Two\FacebookProvider
+     */
+    protected function getFacebookProvider()
+    {
+        return $this->socialite->driver('facebook');
     }
 }
