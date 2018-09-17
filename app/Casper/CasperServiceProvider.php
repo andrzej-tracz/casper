@@ -4,8 +4,10 @@ namespace App\Casper;
 
 use App\Casper\Manager\EventManager;
 use App\Casper\Manager\UserManager;
+use App\Casper\Repository\EventInvitationsRepository;
 use App\Casper\Repository\EventsRepository;
 use App\Casper\Repository\GuestRepository;
+use App\Casper\Repository\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class CasperServiceProvider extends ServiceProvider
@@ -29,6 +31,8 @@ class CasperServiceProvider extends ServiceProvider
     {
         $this->app->singleton(EventsRepository::class);
         $this->app->singleton(GuestRepository::class);
+        $this->app->singleton(EventInvitationsRepository::class);
+        $this->app->singleton(UserRepository::class);
     }
 
     protected function registerManagers()
@@ -46,6 +50,8 @@ class CasperServiceProvider extends ServiceProvider
         return [
             EventsRepository::class,
             GuestRepository::class,
+            EventInvitationsRepository::class,
+            UserRepository::class,
             EventManager::class,
             UserManager::class,
             EventInvitationManager::class,
