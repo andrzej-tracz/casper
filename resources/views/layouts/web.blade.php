@@ -11,28 +11,35 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="nav-link" href="{{ url('/') }}">
-                    {{ __('Home') }}
-                </a>
-                <a class="nav-link" href="{{ route('web.events.nearest') }}">
-                    {{ __('Nearest Events') }}
-                </a>
-                @auth
-                <a class="nav-link" href="{{ route('panel.events.index') }}">{{ __('My Events') }}</a>
-                @endauth
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav" id="mainNavbar">
+                        <li class="nav-item {{ active('web.index') }}">
+                            <a class="nav-link" href="{{ route('web.index') }}">
+                                {{ __('Home') }}
+                            </a>
+                        </li>
+                        <li class="nav-item {{ active('web.events') }}">
+                            <a class="nav-link" href="{{ route('web.events.nearest') }}">
+                                {{ __('Nearest Events') }}
+                            </a>
+                        </li>
+                        @auth
+                        <li class="nav-item {{ active('panel.events') }}">
+                            <a class="nav-link" href="{{ route('panel.events.index') }}">{{ __('My Events') }}</a>
+                        </li>
+                        @endauth
+                    </ul>
+
                     <ul class="navbar-nav ml-auto">
                         @guest
                             <li class="nav-item">
@@ -42,19 +49,20 @@
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
                         @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}"
-                               title="Authenticated as {{ Auth::user()->email }}"
-                               onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('logout') }}"
+                                   title="Authenticated as {{ Auth::user()->email }}"
+                                   onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
                         @endif
                     </ul>
                 </div>
+
             </div>
         </nav>
         <main class="py-4">
@@ -62,9 +70,9 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ mix('js/app.js') }}" defer></script>
     @auth()
-        <script src="{{ asset('js/panel/app.js') }}" defer></script>
+        <script src="{{ mix('js/panel/app.js') }}" defer></script>
     @endauth
 
     @yield('footer_scripts')

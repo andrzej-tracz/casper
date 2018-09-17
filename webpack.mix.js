@@ -13,6 +13,10 @@ const profile = argv.env.profile || 'production';
  |
  */
 
+if (mix.inProduction()) {
+  mix.version();
+}
+
 mix
   .webpackConfig({
     resolve: {

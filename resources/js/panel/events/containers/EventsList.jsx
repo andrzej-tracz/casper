@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { eventsActions } from "../actions";
-import { Loader, Table } from '../../../abstract/components';
+import { Alert, Loader, Table } from '../../../abstract/components';
 import { Link } from 'react-router-dom';
 import { formatDate } from "../../../abstract/utils/date";
 
@@ -54,8 +54,7 @@ class EventsList extends React.Component {
 
   renderEventDate = (event) => formatDate(event.date);
 
-  render() {
-
+  renderEvents = () => {
     const columns = [
       {
         label: 'Name',
@@ -63,19 +62,41 @@ class EventsList extends React.Component {
       },
       {
         label: 'Type',
-        value: this.renderEventType
+        value: this.renderEventType,
+        className: 'd-none d-md-table-cell',
+        headerClassName: 'd-none d-md-table-cell',
       },
       {
         key: 'place',
-        label: 'Place'
+        label: 'Place',
       },
       {
         key: 'date',
         label: 'Date',
-        value: this.renderEventDate
+        value: this.renderEventDate,
+        className: 'd-none d-md-table-cell',
+        headerClassName: 'd-none d-md-table-cell',
       },
     ];
 
+    if (0 === this.props.events.length) {
+      return (
+        <Alert variant="info">
+          You didn't create any event yet.
+        </Alert>
+      );
+    }
+
+    return (
+      <Table
+        options={this.renderRowOptions}
+        columns={columns}
+        items={this.props.events}
+      />
+    );
+  };
+
+  render() {
     return (
       <div>
         <div className="text-right">
@@ -88,13 +109,7 @@ class EventsList extends React.Component {
         </div>
         {this.props.isPending && (
           <Loader />
-        ) || (
-          <Table
-            options={this.renderRowOptions}
-            columns={columns}
-            items={this.props.events}
-          />
-        )}
+        ) || this.renderEvents()}
       </div>
     );
   }

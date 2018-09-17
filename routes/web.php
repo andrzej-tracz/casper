@@ -12,7 +12,6 @@
 */
 
 Route::get('/', 'Web\EventsController@upcomingEvents')->name('web.index');
-Route::get('home', 'HomeController@index')->name('home');
 Route::get('nearest-events', 'Web\EventsController@nearest')->name('web.events.nearest');
 
 Auth::routes();
