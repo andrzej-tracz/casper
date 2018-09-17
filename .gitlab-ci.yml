@@ -2,6 +2,7 @@ image: andrzejtracz/php-node
 
 variables:
   MYSQL_DATABASE: casper_test
+  MYSQL_ROOT_PASSWORD: casper_test
 
 services:
   - mysql:5.7
