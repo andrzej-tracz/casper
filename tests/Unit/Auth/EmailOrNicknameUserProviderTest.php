@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit\Auth;
+
 use Illuminate\Contracts\Hashing\Hasher;
 use App\Auth\EmailOrNicknameUserProvider;
 

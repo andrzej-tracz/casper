@@ -3,11 +3,22 @@
 namespace App\Auth\Service;
 
 use App\Casper\Model\User;
+use App\Casper\Repository\UserRepository;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use App\Auth\Model\SocialFacebookAccount;
 
 class SocialFacebookService
 {
+    /**
+     * @var UserRepository
+     */
+    protected $users;
+
+    public function __construct(UserRepository $repository)
+    {
+        $this->users = $repository;
+    }
+
     /**
      * @param ProviderUser $providerUser
      * @return User
@@ -45,12 +56,12 @@ class SocialFacebookService
             'provider' => 'facebook'
         ]);
 
-        $user = User::whereEmail($providerUser->getEmail())->first();
+        $user = $this->users->whereEmail($providerUser->getEmail())->first();
 
         if (!$user) {
-            $user = User::create([
+            $user = $this->users->create([
                 'email' => $providerUser->getEmail(),
-                'nickname' => $providerUser->getEmail(),
+                'nickname' => $this->generateUsernameFromEmail($providerUser->getEmail()),
                 'password' => md5(rand(1, 10000)),
             ]);
         }
@@ -59,5 +70,30 @@ class SocialFacebookService
         $account->save();
 
         return $account;
+    }
+
+    /**
+     * Generates unique nickname form provided email
+     *
+     * @param $email
+     * @return string
+     */
+    public function generateUsernameFromEmail($email)
+    {
+        $parts = explode("@", $email);
+        $username = $parts[0];
+        $count = $this->users->where('nickname', $username)->count();
+
+        if (0 == $count) {
+            return $username;
+        }
+
+        $counter = 1;
+        do {
+            $generated = sprintf("%s_%s", $username, $counter);
+            $counter++;
+        } while ($this->users->where('nickname', $generated)->exists());
+
+        return $generated;
     }
 }
