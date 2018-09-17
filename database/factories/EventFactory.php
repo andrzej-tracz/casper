@@ -20,3 +20,30 @@ $factory->define(\App\Casper\Model\Event::class, function (Faker $faker) {
         'geo_lng' => $faker->longitude,
     ];
 });
+
+$factory->define(\App\Casper\Model\EventInvitation::class, function (Faker $faker) {
+    $creator = factory(\App\Casper\Model\User::class)->create();
+    $event = factory(\App\Casper\Model\Event::class)->create([
+        'user_id' => $creator->id
+    ]);
+    $invited = factory(\App\Casper\Model\User::class)->create();
+
+    return [
+        'event_id' => $event->id,
+        'creator_id' => $creator->id,
+        'invited_id' => $invited->id,
+    ];
+});
+
+$factory->define(\App\Casper\Model\Guest::class, function (Faker $faker) {
+    $creator = factory(\App\Casper\Model\User::class)->create();
+    $event = factory(\App\Casper\Model\Event::class)->create([
+        'user_id' => $creator->id
+    ]);
+    $guest = factory(\App\Casper\Model\User::class)->create();
+
+    return [
+        'event_id' => $event->id,
+        'user_id' => $guest->id,
+    ];
+});

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     const EVENT_TYPE_PUBLIC = 'public';
-    const EVENT_TYPE_PRIVATE = 'public';
+    const EVENT_TYPE_PRIVATE = 'private';
 
     protected $fillable = [
         'name',
