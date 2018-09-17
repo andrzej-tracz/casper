@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Auth\Service;
 
+use App\Auth\Service\NicknameGenerator;
 use App\Auth\Service\SocialFacebookService;
 use App\Casper\Model\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -10,9 +11,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
  * Class SocialFacebookServiceTest
  * @package Tests\Unit\Auth\Service
  *
- * @group social
+ * @group auth
  */
-class SocialFacebookServiceTest extends \Tests\TestCase
+class NicknameGeneratorTest extends \Tests\TestCase
 {
     use DatabaseTransactions;
 
@@ -21,8 +22,8 @@ class SocialFacebookServiceTest extends \Tests\TestCase
      */
     public function it_generates_proper_nicknames()
     {
-        /** @var $service SocialFacebookService  */
-        $service = app(SocialFacebookService::class);
+        /** @var $service NicknameGenerator  */
+        $service = app(NicknameGenerator::class);
 
         $this->assertDatabaseMissing('users', [
             'nickname' => 'this-not-exist'
