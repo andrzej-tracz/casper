@@ -1,0 +1,30 @@
+image: andrzejtracz/php-node
+
+cache:
+  paths:
+    - node_modules/
+    - vendor/
+
+before_script:
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
+
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  script:
+    - php -v
+    - deployer --version
+    - node -v
+    - npm -v
+    - composer install
+
+deploy:
+  stage: deploy
+  script:
+    - deployer deploy dev -vvv
+  only:
+    - master
