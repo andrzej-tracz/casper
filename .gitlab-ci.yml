@@ -23,5 +23,7 @@ test:
     - node -v
     - npm -v
     - composer install
+    - npm install
+    - npm run prod
     - composer seed:test
     - composer test
