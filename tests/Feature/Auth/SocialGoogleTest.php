@@ -10,7 +10,7 @@ class SocialGoogleTest extends TestCase
     /**
      * @test
      */
-    public function it_redirects_to_facebook()
+    public function it_redirects_to_google()
     {
         $response = $this->get('auth/google/redirect');
 
