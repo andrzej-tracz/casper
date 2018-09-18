@@ -3,9 +3,14 @@
 namespace App\Providers;
 
 use App\Auth\EmailOrNicknameUserProvider;
+use App\Auth\Service\SocialFacebookService;
+use App\Auth\Service\SocialGoogleService;
 use App\Casper\Model\Event;
 use App\Casper\Model\EventInvitation;
 use App\Casper\Model\Guest;
+use App\Contracts\Auth\SocialUserResolver;
+use App\Http\Controllers\Auth\SocialFacebookController;
+use App\Http\Controllers\Auth\SocialGoogleController;
 use App\Policies\EventPolicy;
 use App\Policies\GuestPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -34,6 +39,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $this->registerAlternativeUserProvider();
+        $this->configureSocialAuthorization();
     }
 
     /**
@@ -46,5 +52,18 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['auth']->provider('eloquent_email_or_nickname_provider', function ($app, array $config) {
             return new EmailOrNicknameUserProvider($app['hash'], $config['model']);
         });
+    }
+
+    protected function configureSocialAuthorization()
+    {
+        $this->app
+            ->when(SocialFacebookController::class)
+            ->needs(SocialUserResolver::class)
+            ->give(SocialFacebookService::class);
+
+        $this->app
+            ->when(SocialGoogleController::class)
+            ->needs(SocialUserResolver::class)
+            ->give(SocialGoogleService::class);
     }
 }

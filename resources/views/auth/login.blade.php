@@ -63,9 +63,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mt-2">
+                        <div class="form-group row mt-4">
                             <div class="col-md-8 offset-md-4">
-                                <a href="{{ route('auth.fb.redirect') }}" class="btn btn-primary">Login with Facebook</a>
+                                <a class="social-login-btn --facebook" href="{{ route('auth.fb.redirect') }}" rel="nofollow">
+                                    <img src="{{ asset('images/fb-sign-in.png') }}"  alt="Sign In with Facebook" />
+                                </a>
+                                <a class="social-login-btn --google" href="{{ route('auth.google.redirect') }}" rel="nofollow">
+                                    <img src="{{ asset('images/google.png') }}"  alt="Sign In with Facebook" />
+                                </a>
                             </div>
                         </div>
 

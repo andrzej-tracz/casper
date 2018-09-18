@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Auth\SocialServices;
 
-class SocialFacebookController extends AbstractSocialController
+class SocialGoogleController extends AbstractSocialController
 {
     /**
      * @inheritdoc
      */
     protected function getProvider()
     {
-        return $this->socialite->driver(SocialServices::FACEBOOK);
+        return $this->socialite->driver(SocialServices::GOOGLE);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Auth\Service;
 
 use App\Auth\SocialServices;
 
-class SocialFacebookService extends AbstractSocialService
+class SocialGoogleService extends AbstractSocialService
 {
     /**
      * The provider name of service
@@ -13,6 +13,6 @@ class SocialFacebookService extends AbstractSocialService
      */
     protected function getProviderName()
     {
-        return SocialServices::FACEBOOK;
+        return SocialServices::GOOGLE;
     }
 }

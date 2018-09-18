@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Auth\Exceptions\FailedAuthorizationException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -46,6 +47,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof FailedAuthorizationException) {
+            return redirect()->to('/')->withErrors(
+                __('An error occurred during authorization, please try again.')
+            );
+        }
+
         return parent::render($request, $exception);
     }
 }

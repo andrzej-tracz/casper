@@ -18,6 +18,9 @@ Auth::routes();
 
 Route::get('auth/fb/redirect', 'Auth\SocialFacebookController@redirect')->name('auth.fb.redirect');
 Route::get('auth/fb/callback', 'Auth\SocialFacebookController@callback')->name('auth.fb.callback');
+Route::get('auth/google/redirect', 'Auth\SocialGoogleController@redirect')->name('auth.google.redirect');
+Route::get('auth/google/callback', 'Auth\SocialGoogleController@callback')->name('auth.google.callback');
+
 
 Route::group([
     'prefix' => 'event',

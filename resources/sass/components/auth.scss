@@ -1,0 +1,20 @@
+.social-login-btn {
+  display: block;
+  width: 184px;
+  height: 45px;
+  margin: 2px 0;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+
+  &.--facebook {
+    height: 43px;
+  }
+
+  &.--google {
+    width: 190px;
+    margin-left: -3px;
+  }
+}
