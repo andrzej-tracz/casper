@@ -6,6 +6,7 @@ use App\Casper\Model\User;
 use App\Eloquent\Repository\AbstractEloquentRepository;
 use Illuminate\Database\Eloquent\Builder;
 use App\Casper\Model\Event;
+use Laravel\Socialite\Contracts\User as SocialUser;
 
 class UserRepository extends AbstractEloquentRepository
 {
@@ -60,6 +61,17 @@ class UserRepository extends AbstractEloquentRepository
             ->orderBy('nickname')
             ->take($limit)
             ->get();
+    }
+
+    /**
+     * Returns internal user instance by provided social user
+     *
+     * @param SocialUser $user
+     * @return mixed
+     */
+    public function findBySocialUser(SocialUser $user)
+    {
+        return $this->where('email', $user->getEmail())->first();
     }
 
     /**

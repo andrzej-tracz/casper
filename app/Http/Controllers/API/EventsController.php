@@ -128,9 +128,9 @@ class EventsController extends Controller
      */
     public function searchNearest(SearchEventsRequest $request)
     {
-        $lat = $request->query->get('lat');
-        $lng = $request->query->get('lng');
-        $radius = $request->query->get('radius');
+        $lat = $request->input('lat');
+        $lng = $request->input('lng');
+        $radius = $request->input('radius');
 
         $events = $this->repository->fetchNearestEvents($lat, $lng, $radius);
 

@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\API;
 
+use App\Casper\Model\Event;
 use App\Casper\Model\User;
 use Carbon\Carbon;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -31,6 +33,127 @@ class EventsManagementTest extends TestCase
         $response->assertJson([
             'message' => 'Unauthenticated.'
         ], true);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_user_events()
+    {
+        $user = User::first();
+        $this->actingAs($user);
+        $response = $this->get('panel/ajax/events', [
+            'Accept' => 'application/json'
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $content = $response->content();
+
+        array_map(function ($event) use ($user) {
+            $this->assertEquals($event['user_id'], $user->id);
+        }, array_get(json_decode($content, true), 'data'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_respond_with_event_details()
+    {
+        $user = User::first();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->actingAs($user);
+        $response = $this->get('panel/ajax/events/' . $event->id, [
+            'Accept' => 'application/json'
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+           'data' => [
+               'id' => $event->id,
+               'name' => $event->name,
+           ]
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_updates_an_event()
+    {
+        $user = User::first();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->actingAs($user);
+        $response = $this->put('panel/ajax/events/' . $event->id, [
+            'name' => 'Lorem ipsum dolore sit'
+        ], [
+            'Accept' => 'application/json'
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'data' => [
+                'id' => $event->id,
+                'name' => 'Lorem ipsum dolore sit',
+            ]
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_removes_an_event()
+    {
+        $user = User::first();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->actingAs($user);
+        $response = $this->delete('panel/ajax/events/' . $event->id, [
+            'Accept' => 'application/json'
+        ]);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @test
+     */
+    public function it_searches_a_nearest_events()
+    {
+        $user = User::first();
+        $faker = Factory::create();
+        $lat = $faker->latitude;
+        $lng = $faker->longitude;
+
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+            'date' => Carbon::now()->addWeek()->format('Y-m-d'),
+            'event_type' => Event::EVENT_TYPE_PUBLIC,
+            'geo_lat' => $lat,
+            'geo_lng' => $lng,
+        ]);
+
+        $response = $this->json('GET', 'event/ajax/nearest-events-search', [
+            'lat' => $lat,
+            'lng' => $lng
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'data' => [
+                [
+                    'id' => $event->id,
+                    'name' => $event->name,
+                ]
+            ]
+        ]);
     }
 
     /**

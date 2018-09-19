@@ -2,6 +2,7 @@
 
 namespace App\Casper\Model;
 
+use App\Auth\Model\SocialAccount;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -71,5 +72,13 @@ class User extends Authenticatable
     public function createdEventInvitations()
     {
         return $this->hasMany(EventInvitation::class, 'creator_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function socialAccounts()
+    {
+        return $this->hasMany(SocialAccount::class);
     }
 }

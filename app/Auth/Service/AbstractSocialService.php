@@ -3,6 +3,7 @@
 namespace App\Auth\Service;
 
 use App\Casper\Model\User;
+use App\Casper\Repository\SocialAccountRepository;
 use App\Casper\Repository\UserRepository;
 use App\Contracts\Auth\SocialUserResolver;
 use Laravel\Socialite\Contracts\User as ProviderUser;
@@ -17,6 +18,11 @@ abstract class AbstractSocialService implements SocialUserResolver
     protected $users;
 
     /**
+     * @var SocialAccountRepository
+     */
+    protected $accounts;
+
+    /**
      * @var NicknameGenerator
      */
     protected $generator;
@@ -28,10 +34,12 @@ abstract class AbstractSocialService implements SocialUserResolver
 
     public function __construct(
         UserRepository $repository,
+        SocialAccountRepository $accounts,
         NicknameGenerator $generator,
         UserManager $manager
     ) {
         $this->users = $repository;
+        $this->accounts = $accounts;
         $this->generator = $generator;
         $this->manager = $manager;
     }
@@ -56,9 +64,7 @@ abstract class AbstractSocialService implements SocialUserResolver
      */
     protected function fetchAccount(ProviderUser $providerUser)
     {
-        return SocialAccount::where('provider', $this->getProviderName())
-            ->where('provider_user_id', $providerUser->getId())
-            ->first();
+        return $this->accounts->findBySocialUserAndProvider($providerUser, $this->getProviderName());
     }
 
     /**
@@ -74,7 +80,7 @@ abstract class AbstractSocialService implements SocialUserResolver
             'provider' => $this->getProviderName()
         ]);
 
-        $user = $this->users->where('email', $providerUser->getEmail())->first();
+        $user = $this->users->findBySocialUser($providerUser);
 
         if (!$user) {
             $user = $this->manager->create([
