@@ -1,4 +1,4 @@
-image: andrzejtracz/php-node
+image: andrzejtracz/php-ci
 
 variables:
   MYSQL_DATABASE: casper_test
