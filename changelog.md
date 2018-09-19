@@ -1,5 +1,7 @@
 
 * 1.* - unreleased
+    * external authorization via Google
+    * initial integration with Laravel Dusk
 
 * 1.0.1 - 17.09.2018r - Deployment script tweaks
     * frontend assets are no longer versioned in git
