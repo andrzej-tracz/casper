@@ -6,7 +6,6 @@ use App\Casper\Manager\EventInvitationManager;
 use App\Casper\Model\Event;
 use App\Casper\Model\User;
 use App\Casper\Notifications\EventInvitation as EventInvitationNotification;
-use App\Http\Resources\EventInvitation;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;

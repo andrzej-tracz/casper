@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Http\Controllers;
 
-use App\Auth\Exceptions\FailedAuthorizationException;
 use App\Casper\Model\User;
 use App\Http\Controllers\Auth\SocialFacebookController;
 use App\Http\Controllers\Auth\SocialGoogleController;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Tests\TestCase;
 
 /**

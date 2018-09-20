@@ -6,9 +6,7 @@ use App\Casper\Manager\EventInvitationManager;
 use App\Casper\Model\Event;
 use App\Casper\Model\EventInvitation;
 use App\Casper\Model\User;
-use http\Exception\RuntimeException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Notifications\ChannelManager;
 use Tests\TestCase;
 
 /**

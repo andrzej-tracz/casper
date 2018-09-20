@@ -3,10 +3,8 @@
 namespace Tests\Unit\Policies;
 
 use App\Casper\Model\Event;
-use App\Casper\Model\EventInvitation;
 use App\Casper\Model\Guest;
 use App\Casper\Model\User;
-use App\Policies\EventPolicy;
 use App\Policies\GuestPolicy;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

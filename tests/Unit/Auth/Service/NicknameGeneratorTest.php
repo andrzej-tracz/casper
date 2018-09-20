@@ -3,7 +3,6 @@
 namespace Tests\Unit\Auth\Service;
 
 use App\Auth\Service\NicknameGenerator;
-use App\Auth\Service\SocialFacebookService;
 use App\Casper\Model\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
