@@ -9,6 +9,12 @@ use App\Casper\Model\User;
 use App\Policies\EventPolicy;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * Class EventPolicyTest
+ * @package Tests\Unit\Policies
+ *
+ * @group policies
+ */
 class EventPolicyTest extends \Tests\TestCase
 {
     use DatabaseTransactions;
@@ -42,6 +48,21 @@ class EventPolicyTest extends \Tests\TestCase
 
         $this->assertTrue($event->isPublic());
         $this->assertTrue($this->policy->view(null, $event));
+    }
+
+    /**
+     * @test
+     */
+    public function it_dont_allows_for_guest_view_when_event_is_private()
+    {
+        $user = factory(User::class)->create();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+            'event_type' => Event::EVENT_TYPE_PRIVATE
+        ]);
+
+        $this->assertFalse($event->isPublic());
+        $this->assertFalse($this->policy->view(null, $event));
     }
 
     /**

@@ -2,12 +2,13 @@
 
 use Faker\Generator as Faker;
 
-
 $factory->define(\App\Casper\Model\Event::class, function (Faker $faker) {
     $date = \Carbon\Carbon::now()->addDays($faker->numberBetween(10, 30));
+    $creator = factory(\App\Casper\Model\User::class)->create();
 
     return [
         'name' => $faker->sentence,
+        'user_id' => $creator->id,
         'event_type' => array_random(['private', 'public']),
         'place' => $faker->city,
         'description' => $faker->sentence(30),
