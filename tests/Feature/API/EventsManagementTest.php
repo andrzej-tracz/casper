@@ -197,7 +197,7 @@ class EventsManagementTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        $response = $this->post('panel/ajax/events', [],  [
+        $response = $this->post('panel/ajax/events', [], [
             'Accept' => 'application/json'
         ]);
 
@@ -226,7 +226,7 @@ class EventsManagementTest extends TestCase
         $response = $this->post('panel/ajax/events', [
             'geo_lat' => 'bad_lat',
             'geo_lng' => 'bad_lng',
-        ],  [
+        ], [
             'Accept' => 'application/json'
         ]);
 
@@ -247,7 +247,7 @@ class EventsManagementTest extends TestCase
 
         $response = $this->post('panel/ajax/events', [
             'event_type' => 'invalid_event_type',
-        ],  [
+        ], [
             'Accept' => 'application/json'
         ]);
 

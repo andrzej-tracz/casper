@@ -104,5 +104,4 @@ class EventManagerTest extends TestCase
 
         $this->manager->joinToEvent($event, $user);
     }
-
 }

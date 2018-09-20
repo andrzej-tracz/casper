@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Page;
 
-
 class RegisterPage extends Page
 {
     /**

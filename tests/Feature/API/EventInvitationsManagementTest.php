@@ -176,5 +176,4 @@ class EventInvitationsManagementTest extends TestCase
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
-
 }

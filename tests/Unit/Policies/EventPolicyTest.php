@@ -157,5 +157,4 @@ class EventPolicyTest extends \Tests\TestCase
 
         $this->assertFalse($this->policy->join($user, $event));
     }
-
 }

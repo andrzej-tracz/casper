@@ -60,7 +60,7 @@
         ],
         "seed:test": "php artisan migrate:refresh --seed --env testing",
         "test": "vendor/bin/phpunit",
-        "cs-fix": "php-cs-fixer fix app",
+        "cs-fix": "php-cs-fixer fix app && php-cs-fixer fix tests",
         "deploy:dev": "vendor/bin/dep deploy dev -vvv"
     },
     "config": {
