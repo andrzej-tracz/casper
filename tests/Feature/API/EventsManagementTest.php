@@ -141,7 +141,7 @@ class EventsManagementTest extends TestCase
         ]);
 
         $response = $this->json('GET', 'event/ajax/nearest-events-search', [
-            'lat' => $lat,
+            'lat' => $lat + 0.04, // about ~4km distance
             'lng' => $lng
         ]);
 

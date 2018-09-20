@@ -6,6 +6,7 @@ use App\Casper\Manager\EventInvitationManager;
 use App\Casper\Model\Event;
 use App\Casper\Model\User;
 use App\Casper\Notifications\EventInvitation as EventInvitationNotification;
+use App\Http\Resources\EventInvitation;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -28,9 +29,7 @@ class EventInvitationsManagementTest extends TestCase
         $user = User::first();
         $event = $user->events()->save(factory(Event::class)->make());
 
-        $response = $this->post("panel/ajax/events/{$event->id}/invitations", [], [
-            'Accept' => 'application/json'
-        ]);
+        $response = $this->json("POST", "panel/ajax/events/{$event->id}/invitations", []);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
         $response->assertJson([
@@ -49,9 +48,7 @@ class EventInvitationsManagementTest extends TestCase
         $other = factory(User::class)->create();
         $this->actingAs($other);
 
-        $response = $this->get("panel/ajax/events/{$event->id}/invitations", [
-            'Accept' => 'application/json'
-        ]);
+        $response = $this->json("GET", "panel/ajax/events/{$event->id}/invitations");
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
@@ -67,13 +64,24 @@ class EventInvitationsManagementTest extends TestCase
         $other = factory(User::class)->create();
         $this->actingAs($other);
 
-        $response = $this->post("panel/ajax/events/{$event->id}/invitations", [
+        $response = $this->json("POST", "panel/ajax/events/{$event->id}/invitations", [
             'user_id' => $user->id
-        ], [
-            'Accept' => 'application/json'
         ]);
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_invitations_for_given_event()
+    {
+        /** @var $invitation \App\Casper\Model\EventInvitation */
+        $invitation = factory(\App\Casper\Model\EventInvitation::class)->create();
+        $this->actingAs($invitation->creator);
+
+        $response = $this->json("GET", "panel/ajax/events/{$invitation->event->getKey()}/invitations");
+        $response->assertOk();
     }
 
     /**
@@ -86,13 +94,41 @@ class EventInvitationsManagementTest extends TestCase
         $this->actingAs($user);
         $invited = factory(User::class)->create();
 
-        $response = $this->post("panel/ajax/events/{$event->id}/invitations", [
+        $response = $this->json("POST", "panel/ajax/events/{$event->id}/invitations", [
             'user_id' => $invited->id
-        ], [
-            'Accept' => 'application/json'
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    /**
+     * @test
+     */
+    public function it_validates_already_invited_users()
+    {
+        $user = factory(User::class)->create();
+        $event = $user->events()->save(factory(Event::class)->make());
+        $this->actingAs($user);
+
+        $invited = factory(User::class)->create();
+        factory(\App\Casper\Model\EventInvitation::class)->create([
+            'creator_id' => $user->getKey(),
+            'event_id' => $event->getKey(),
+            'invited_id' => $invited->getKey(),
+        ]);
+
+        $response = $this->json("POST", "panel/ajax/events/{$event->id}/invitations", [
+            'user_id' => $invited->id
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJson([
+            'errors' => [
+                [
+                    "Selected user has been already invited to this event."
+                ]
+            ]
+        ]);
     }
 
     /**
