@@ -89,10 +89,11 @@ class EventsManagementTest extends TestCase
         ]);
 
         $this->actingAs($user);
-        $response = $this->put('panel/ajax/events/' . $event->id, [
-            'name' => 'Lorem ipsum dolore sit'
-        ], [
-            'Accept' => 'application/json'
+        $response = $this->json("PUT", 'panel/ajax/events/' . $event->id, [
+            'name' => 'Lorem ipsum dolore sit',
+            'applications_ends_at' => Carbon::now()->addWeek()->format('Y-m-d'),
+            'date' => Carbon::now()->addWeeks(2)->format('Y-m-d'),
+            'time' =>  Carbon::now()->format('H:i'),
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
