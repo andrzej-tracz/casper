@@ -69,7 +69,7 @@ class GoogleMapComponent extends React.Component {
       address: this.props.address
     }, (results, status) => {
       if (status === 'OK') {
-        const location = results[ 0 ].geometry.location;
+        const location = results[0].geometry.location;
 
         this.setState({
           position: {
