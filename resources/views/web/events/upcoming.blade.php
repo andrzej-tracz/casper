@@ -11,9 +11,14 @@
             </div>
             <div class="row align-items-stretch">
                 @foreach($events as $event)
-                    @component('events.components.event-list-item', [ 'event' => $event ])
+                    @component('events.components.event-list-item', ['event' => $event])
                     @endcomponent
                 @endforeach
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ $events->render() }}
+                </div>
             </div>
         @else
             <div class="row justify-content-center align-items-stretch">

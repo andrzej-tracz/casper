@@ -19,7 +19,7 @@ class EventsRepository extends AbstractEloquentRepository
      */
     public function fetchPublicUpcomingEvents(User $user = null, $days = 30)
     {
-        return $this->createUpcomingEventsQuery($user, $days)->get();
+        return $this->createUpcomingEventsQuery($user, $days)->paginate();
     }
 
     /**
@@ -36,9 +36,10 @@ class EventsRepository extends AbstractEloquentRepository
             $radius = 5;
         }
 
-        return $this
+        $result = $this
             ->createUpcomingEventsQuery()
             ->selectRaw(
+                'events.*, ' .
                 '(6371 * acos(cos(radians(?)) * cos(radians(geo_lat)) 
                 * cos(radians(geo_lng) - radians(?)) + sin(radians(?)) 
                 * sin(radians(geo_lat)))) AS distance',
@@ -48,6 +49,8 @@ class EventsRepository extends AbstractEloquentRepository
             )
             ->having('distance', '<=', $radius)
             ->get();
+
+        return $result;
     }
 
     /**
@@ -72,7 +75,7 @@ class EventsRepository extends AbstractEloquentRepository
      *
      * @param User|null $user
      * @param int $days
-     * @return mixed
+     * @return Builder|Event
      */
     protected function createUpcomingEventsQuery(User $user = null, $days = 30)
     {
@@ -84,10 +87,7 @@ class EventsRepository extends AbstractEloquentRepository
             }
         })
             ->where('date', '<=', Carbon::now()->addDays($days))
-            ->selectRaw(
-                'events.*, concat(events.date, " ", events.time) as event_date_time'
-            )
-            ->having('event_date_time', '>=', Carbon::now());
+            ->whereRaw('concat(events.date, " ", events.time) >= ?', [Carbon::now()]);
     }
 
     /**
